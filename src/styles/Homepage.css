@@ -1,0 +1,20 @@
+.split-screen {
+    display: flex;
+    height: 100vh; /* Chiều cao của cả màn hình */
+    overflow: hidden; /* Tránh hiện tượng cuộn khi nội dung dài hơn */
+  }
+  
+  .left-side {
+    background-color: #f4f4f4;
+    width: 50%; /* Chiều rộng bên trái */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .right-side {
+    background-color: #ffffff;
+    width: 50%; /* Chiều rộng bên phải */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Hiển thị thanh cuộn nếu nội dung dài */
+  }
