@@ -6,12 +6,9 @@ import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import { BiSearchAlt } from "react-icons/bi";
 import { Button } from "primereact/button";
-import "../styles/Homepage.css"
+import Form from "./Form";
 
-import DefaultLayout from "../components/DefaultLayout";
-import Form from "../components/Form";
-
-const Homepage = () => {
+const HistoryTable = () => {
   const [showForm, setShowForm] = useState(false);
 
   const [filters, setFilters] = useState({
@@ -107,78 +104,77 @@ const Homepage = () => {
   ]);
 
   return (
-    <DefaultLayout>
-      <div className="content" >
-        <h4>Danh sách bệnh nhân</h4>
-        <div className="p-d-flex p-jc-end">
-          <span className="p-input-icon-left">
-            <InputText
-              type="search"
-              onInput={(e) =>
-                setFilters({
-                  global: {
-                    value: e.target.value,
-                    matchMode: FilterMatchMode.CONTAINS,
-                  },
-                })
-              }
-              placeholder="Search..."
-            />
-            <BiSearchAlt />
-          </span>
-          &nbsp;
-          <Button
-            label="+ Tạo mới"
-            severity="info"
-            onClick={() => setShowForm(true)}
+    <div className="App">
+      <h4>Danh sách bệnh nhân</h4>
+      <div className="p-d-flex p-jc-end">
+        <span className="p-input-icon-left">
+          <InputText
+            type="search"
+            onInput={(e) =>
+              setFilters({
+                global: {
+                  value: e.target.value,
+                  matchMode: FilterMatchMode.CONTAINS,
+                },
+              })
+            }
+            placeholder="Search..."
           />
-          {showForm && (
-            <div className="rightside">
-              <Form
-                closeForm={() => {
-                  setShowForm(false);
-                }}
-              />
-            </div>
-          )}
-        </div>
-        <div className="p-d-flex">
-          <div className="p-col-9">
-            <DataTable
-              value={data}
-              sortMode="multiple"
-              filters={filters}
-              paginator
-              rows={5}
-              rowsPerPageOptions={[1, 2, 3, 4, 5]}
-              totalRecords={data.length}
-            >
-              {Object.keys(data[0]).map((fieldName, index) => (
-                <Column
-                  key={index}
-                  field={fieldName}
-                  header={fieldName}
-                  sortable
-                ></Column>
-              ))}
-              <Column
-                body={(rowData) => (
-                  <span>
-                    <BsFillPencilFill />
-                    <BsFillTrashFill
-                      className="delete-btn"
-                      onClick={() => handleDelete(rowData)}
-                    />
-                  </span>
-                )}
-                style={{ textAlign: "center" }}
-              ></Column>
-            </DataTable>
+          <BiSearchAlt />
+        </span>
+        &nbsp;
+        <Button
+          label="+ Tạo mới"
+          severity="info"
+          onClick={() => setShowForm(true)}
+        />
+        {showForm && (
+          <div className="rightside">
+            <Form
+              closeForm={() => {
+                setShowForm(false);
+              }}
+            />
           </div>
-        </div>
+        )}
       </div>
-    </DefaultLayout>
+      <div className="p-d-flex">
+        <div className="p-col-9">
+          <DataTable
+            value={data}
+            sortMode="multiple"
+            filters={filters}
+            paginator
+            rows={5}
+            rowsPerPageOptions={[1, 2, 3, 4, 5]}
+            totalRecords={data.length}
+          >
+            {Object.keys(data[0]).map((fieldName, index) => (
+              <Column
+                key={index}
+                field={fieldName}
+                header={fieldName}
+                sortable
+              ></Column>
+            ))}
+            <Column
+              body={(rowData) => (
+                <span>
+                  <BsFillPencilFill />
+                  <BsFillTrashFill
+                    className="delete-btn"
+                    onClick={() => handleDelete(rowData)}
+                  />
+                </span>
+              )}
+              style={{ textAlign: "center" }}
+            ></Column>
+          </DataTable>
+        </div>
+        
+      </div>
+    </div>
   );
 };
 
-export default Homepage;
+export default HistoryTable;

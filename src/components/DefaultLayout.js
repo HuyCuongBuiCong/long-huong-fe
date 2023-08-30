@@ -1,71 +1,55 @@
-import React from "react";
-import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  HomeOutlined,
-  CopyOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 import "../styles/DefaultLayout.css";
 
-const { Header, Sider, Content } = Layout;
+const DefaultLayout = ({ children }) => {
+  return (
+    <div>
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid">
+          <Link to="/" className="navbar-brand">
+            LONG HƯƠNG
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-export default class DefaultLayout extends React.Component {
-  state = {
-    collapsed: false,
-  };
-
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  };
-
-  render() {
-    return (
-      <Layout>
-        <Sider className="sidebar" trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo">
-            <h1 className="text-center text-light font-wight-bold mt-4">POS</h1>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <NavLink to="/" className="nav-link">
+                  Home
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/patient" className="nav-link">
+                  Patient
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/form" className="nav-link">
+                  Form
+                </NavLink>
+              </li>
+            </ul>
           </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={[window.location.pathname]}
-          >
-            <Menu.Item key="/" icon={<HomeOutlined />}>
-              <Link to="/">Home</Link>
-            </Menu.Item>
-            <Menu.Item key="/patient" icon={<CopyOutlined />}>
-              <Link to="/patient">Patient</Link>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }}>
-            {React.createElement(
-              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-              {
-                className: "trigger",
-                onClick: this.toggle,
-              }
-            )}
-          </Header>
+        </div>
+      </nav>
+      <div className="content">
+        {children} {/* Hiển thị nội dung trang */}
+      </div>
+    </div>
+  );
+};
 
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            {this.props.children}
-          </Content>
-        </Layout>
-      </Layout>
-    );
-  }
-}
+export default DefaultLayout;

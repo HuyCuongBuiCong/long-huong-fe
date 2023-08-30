@@ -1,4 +1,4 @@
-.form-container {
+/* .form-container {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.4);
-}
+} */
 
 .form {
   border-radius: 5px;

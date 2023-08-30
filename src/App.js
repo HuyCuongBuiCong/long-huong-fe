@@ -1,8 +1,10 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Homepage from './pages/Homepage';
-import PatientPage from './pages/PatientPage';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import PatientPage from "./pages/PatientPage";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
+import DefaultLayout from "./components/DefaultLayout";
+import Form from "./components/Form";
 
 function App() {
   return (
