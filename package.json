@@ -1,6 +1,6 @@
 {
-  "name": "basic-theme",
-  "version": "0.1.0",
+  "name": "longhuong-frontend",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@iconscout/react-unicons": "^1.1.6",
