@@ -10,7 +10,6 @@ import FeatherIcon from 'feather-icons-react';
 import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from 'reactstrap';
 
 // Import menuDropdown
-import LanguageDropdown from '../CommonForBoth/TopbarDropdown/LanguageDropdown';
 import NotificationDropdown from '../CommonForBoth/TopbarDropdown/NotificationDropdown';
 import ProfileMenu from '../CommonForBoth/TopbarDropdown/ProfileMenu';
 import LightDark from '../CommonForBoth/Menus/LightDark';
@@ -38,7 +37,6 @@ const Header = (props) => {
     showRightSidebar: state.Layout.ShowRightSidebar
   }));
   const { onChangeLayoutMode } = props;
-  const [search, setsearch] = useState(false);
   const [socialDrp, setsocialDrp] = useState(false);
   const [isClick, setClick] = useState(true);
 

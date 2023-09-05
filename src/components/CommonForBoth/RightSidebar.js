@@ -29,7 +29,7 @@ import { Link } from 'react-router-dom';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 
-const RightSidebar = ({ onClose, onChangeLayoutMode }) => {
+const RightSidebar = ({ onChangeLayoutMode }) => {
   const dispatch = useDispatch();
 
   const { layoutType, layoutWidth, layoutPosition, topbarTheme, leftSideBarType, leftSideBarTheme, layoutMode } =

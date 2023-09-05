@@ -4,9 +4,6 @@ import React, { useEffect, useRef, useCallback } from 'react';
 //Import Icons
 import FeatherIcon from 'feather-icons-react';
 
-//Import images
-import giftBox from '../../assets/images/giftbox.png';
-
 // //Import Scrollbar
 import SimpleBar from 'simplebar-react';
 

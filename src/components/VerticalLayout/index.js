@@ -78,6 +78,7 @@ const Layout = (props) => {
     } else {
       document.getElementById('preloader').style.display = 'none';
     }
+    // eslint-disable-next-line
   }, [isPreloader]);
 
   useEffect(() => {
