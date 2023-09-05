@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 //i18n
 import { withTranslation } from 'react-i18next';
-// Redux
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // users
@@ -15,19 +13,7 @@ const ProfileMenu = (props) => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false);
 
-  const [username, setusername] = useState('Admin');
-
-  useEffect(() => {
-    if (localStorage.getItem('authUser')) {
-      if (process.env.REACT_APP_DEFAULTAUTH === 'firebase') {
-        const obj = JSON.parse(localStorage.getItem('authUser'));
-        setusername(obj.displayName);
-      } else if (process.env.REACT_APP_DEFAULTAUTH === 'fake' || process.env.REACT_APP_DEFAULTAUTH === 'jwt') {
-        const obj = JSON.parse(localStorage.getItem('authUser'));
-        setusername(obj.username);
-      }
-    }
-  }, [props.success]);
+  const [username] = useState('Admin');
 
   return (
     <React.Fragment>
@@ -72,9 +58,4 @@ ProfileMenu.propTypes = {
   t: PropTypes.any
 };
 
-const mapStatetoProps = (state) => {
-  const { error, success } = state.Profile;
-  return { error, success };
-};
-
-export default connect(mapStatetoProps, {})(withTranslation()(ProfileMenu));
+export default withTranslation()(ProfileMenu);

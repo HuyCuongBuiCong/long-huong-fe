@@ -13,13 +13,11 @@ import Authmiddleware from './routes/middleware/Authmiddleware';
 import VerticalLayout from './components/VerticalLayout/';
 import NonAuthLayout from './components/NonAuthLayout';
 
+import Error404 from './pages/Error404';
+
 // Import scss
 import './assets/scss/theme.scss';
 import './assets/scss/preloader.scss';
-
-// import fakeBackend from './helpers/AuthType/fakeBackend';
-// // Activating fake backend
-// fakeBackend();
 
 const App = () => {
   const Layout = VerticalLayout;
@@ -48,6 +46,7 @@ const App = () => {
               exact
             />
           ))}
+          <Authmiddleware name="Page not found" layout={Layout} component={Error404} isAuthProtected={false} />
         </Switch>
       </Router>
     </React.Fragment>
