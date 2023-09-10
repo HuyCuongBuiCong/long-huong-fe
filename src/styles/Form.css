@@ -1,22 +1,3 @@
-/* .form-container {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.4);
-} */
-
-.form {
-  border-radius: 5px;
-  padding: 2rem;
-  background-color: white;
-  width: 25en;
-} 
 .form-style {
   text-align: center;
   width: 100px;
@@ -46,4 +27,50 @@
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
+}
+.input-container {
+  display: flex;
+}
+.input{
+  background-color: white;
+  padding: 10px;
+  margin: 0;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+
+.form-container {
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%; /* Độ rộng tối đa là 100% */
+  padding: 1rem;
+}
+
+.input-field {
+  /* display: flex; */
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.field-radiobutton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Điều chỉnh khoảng cách giữa nút và trường input bên trên (tuỳ chỉnh) */
+}
+.form-left{
+  width: 50%;
+}
+.form-right{
+  width: 50%;
+}
+
+.custom-calendar-icon {
+  color: #2196F3; /* Màu xanh (blue-500) cho icon */
 }

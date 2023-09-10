@@ -36,11 +36,6 @@ const DefaultLayout = ({ children }) => {
                   Patient
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink to="/form" className="nav-link">
-                  Form
-                </NavLink>
-              </li>
             </ul>
           </div>
         </div>

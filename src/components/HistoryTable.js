@@ -1,178 +1,208 @@
 import React, { useState } from "react";
-import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import { BiSearchAlt } from "react-icons/bi";
 import { Button } from "primereact/button";
+import { patientsData } from "../data.js";
 import Form from "./Form";
+import { Splitter, SplitterPanel } from "primereact/splitter";
+import PatientDetail from "./PatientDetail.js";
 
 const HistoryTable = () => {
   const [showForm, setShowForm] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [showSplitter, setShowSplitter] = useState(false); // Khởi tạo showSplitter là false để ẩn Splitter
+  const [showHistoryTable, setShowHistoryTable] = useState(true); // Khởi tạo showHistoryTable là true để hiển thị HistoryTable
+  const [showDetail, setShowDetail] = useState(false); // Khởi tạo showDetail là false
+
+  const [filteredData, setFilteredData] = useState(patientsData);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const onPageChange = (event) => {
+    setCurrentPage(event.page + 1); // Trong PrimeReact, trang bắt đầu từ 0, nhưng currentPage thường bắt đầu từ 1
+  };
+
+  const itemsPerPage = 5; // Số mục trên mỗi trang
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const visibleData = filteredData.slice(startIndex, endIndex);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const handleDelete = (rowData) => {
-    const newData = data.filter((item) => item.id !== rowData.id);
-    setData(newData);
+  const handleFilter = (e) => {
+    setFilters({
+      global: {
+        value: e.target.value,
+        matchMode: FilterMatchMode.CONTAINS,
+      },
+    });
+
+    const filteredPatients = patientsData.filter((patient) =>
+      Object.values(patient).some((field) =>
+        String(field).toLowerCase().includes(e.target.value.toLowerCase())
+      )
+    );
+
+    setFilteredData(filteredPatients);
   };
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      // order_id: "20230815-1027",
-      fullName: "Nguyễn Tuấn Anh",
-      // gender: "Nam",
-      yearOfBirth: "1979",
-      phone: "0989898882",
-      time: "15:51 15/08/2023",
-      address: "12 NVC, CanTho",
-    },
-    {
-      id: 2,
-      // order_id: "20230815-1026",
-      fullName: "Nguyễn Thùy Nga",
-      // gender: "Nữ",
-      yearOfBirth: "1984",
-      phone: "0919767882",
-      time: "15:19 15/08/2023",
-      address: "95 TVT, CanTho",
-    },
-    {
-      id: 3,
-      // order_id: "20230815-1025",
-      fullName: "Mỵ Duy Hoàn",
-      // gender: "Nữ",
-      yearOfBirth: "1983",
-      phone: "0929833282",
-      time: "14:37 15/08/2023",
-      address: "38 HV, CanTho",
-    },
-    {
-      id: 4,
-      // order_id: "20230815-1024",
-      fullName: "Đỗ Văn Ni",
-      // gender: "Nữ",
-      yearOfBirth: "1978",
-      phone: "0727823223",
-      time: "14:36 15/08/2023",
-      address: "12 THD, CanTho",
-    },
-    {
-      id: 5,
-      // order_id: "20230815-1023",
-      fullName: "Lê Thị Thanh Tú",
-      // gender: "Nữ",
-      yearOfBirth: "1989",
-      phone: "0387271281",
-      time: "14:34 15/08/2023",
-      address: "92 THD, CanTho",
-    },
-    {
-      id: 6,
-      // order_id: "20230815-1022",
-      fullName: "Cung Văn Tuyên",
-      // gender: "Nữ",
-      yearOfBirth: "1976",
-      phone: "0791678192",
-      time: "14:32 15/08/2023",
-      address: "72 MT, CanTho",
-    },
-    {
-      id: 7,
-      // order_id: "20230815-1021",
-      fullName: "Hồ Thị Duyên",
-      // gender: "Nữ",
-      yearOfBirth: "1982",
-      phone: "0734001223",
-      time: "14:31 15/08/2023",
-      address: "88 LL, CanTho",
-    },
-    {
-      id: 8,
-      // order_id: "20230815-1020",
-      fullName: "Nguyễn Văn Sang",
-      // gender: "Nam",
-      yearOfBirth: "1987",
-      phone: "09012100343",
-      time: "14:30 15/08/2023",
-      address: "12 3/2, CanTho",
-    },
-  ]);
+  const showDetailForm = (patient) => {
+    setSelectedPatient(patient);
+    setShowForm(false);
+    setShowSplitter(true);
+    setShowHistoryTable(false);
+    setShowDetail(true);
+  };
 
   return (
     <div className="App">
-      <h4>Danh sách bệnh nhân</h4>
-      <div className="p-d-flex p-jc-end">
-        <span className="p-input-icon-left">
-          <InputText
-            type="search"
-            onInput={(e) =>
-              setFilters({
-                global: {
-                  value: e.target.value,
-                  matchMode: FilterMatchMode.CONTAINS,
-                },
-              })
-            }
-            placeholder="Search..."
-          />
-          <BiSearchAlt />
-        </span>
-        &nbsp;
-        <Button
-          label="+ Tạo mới"
-          severity="info"
-          onClick={() => setShowForm(true)}
-        />
-        {showForm && (
-          <div className="rightside">
-            <Form
-              closeForm={() => {
-                setShowForm(false);
+      {showHistoryTable && (
+        <div>
+          <h4 style={{ marginLeft: 5 }} className="mt-3">
+            Danh sách bệnh nhân
+          </h4>
+          <div className="p-d-flex p-jc-end" style={{ marginLeft: 5 }}>
+            <span className="p-input-icon-left">
+              <InputText
+                type="search"
+                onInput={handleFilter}
+                placeholder="Search..."
+              />
+              <BiSearchAlt />
+            </span>
+            &nbsp;
+            <Button
+              icon="pi pi-plus"
+              label="Tạo mới"
+              severity="info"
+              onClick={() => {
+                setShowForm(true);
+                setShowSplitter(true);
+                setShowHistoryTable(false);
+                setShowDetail(false);
               }}
             />
+          </div>{" "}
+          <div className="p-d-flex mt-3">
+            <div className="p-col-9">
+              <DataTable
+              value={filteredData}
+              sortMode="multiple"
+              filters={filters}
+              paginator
+              rows={5}
+              rowsPerPageOptions={[1, 2, 3, 4, 5]}
+              totalRecords={filteredData.length}
+              onRowClick={(e) => showDetailForm(e.data)}
+              >
+                <Column field="patient_id" header="STT" sortable />
+                <Column field="patient_fullname" header="Họ tên" sortable />
+                <Column
+                  field="patient_yearOfBirth"
+                  header="Năm sinh"
+                  sortable
+                />
+                <Column field="patient_phone" header="Số điện thoại" sortable />
+                <Column field="patient_city" header="Địa chỉ" sortable />
+                <Column
+                  field="latest_update"
+                  header="Thời gian khám"
+                  sortable
+                />
+              </DataTable>
+            </div>
           </div>
-        )}
-      </div>
-      <div className="p-d-flex">
-        <div className="p-col-9">
-          <DataTable
-            value={data}
-            sortMode="multiple"
-            filters={filters}
-            paginator
-            rows={5}
-            rowsPerPageOptions={[1, 2, 3, 4, 5]}
-            totalRecords={data.length}
-          >
-            {Object.keys(data[0]).map((fieldName, index) => (
-              <Column
-                key={index}
-                field={fieldName}
-                header={fieldName}
-                sortable
-              ></Column>
-            ))}
-            <Column
-              body={(rowData) => (
-                <span>
-                  <BsFillPencilFill />
-                  <BsFillTrashFill
-                    className="delete-btn"
-                    onClick={() => handleDelete(rowData)}
-                  />
-                </span>
-              )}
-              style={{ textAlign: "center" }}
-            ></Column>
-          </DataTable>
         </div>
-        
-      </div>
+      )}
+      {showSplitter && (
+        <Splitter style={{ height: "100%" }}>
+          <SplitterPanel className="flex align-items-center justify-content-center">
+            <div>
+              <h4 className="mt-3">Danh sách bệnh nhân</h4>
+              <div className="p-d-flex p-jc-end">
+                <span className="p-input-icon-left">
+                  <InputText
+                    type="search"
+                    onInput={handleFilter}
+                    placeholder="Search..."
+                  />
+                  <BiSearchAlt />
+                </span>
+                &nbsp;
+                <Button
+                  icon="pi pi-plus"
+                  label="Tạo mới"
+                  severity="info"
+                  onClick={() => {
+                    setShowForm(true);
+                    setShowDetail(false);
+                  }}
+                />
+              </div>{" "}
+              <div className="p-d-flex mt-2">
+                <div className="p-col-9">
+                  <DataTable
+                    value={filteredData}
+                    sortMode="multiple"
+                    filters={filters}
+                    paginator
+                    rows={5}
+                    rowsPerPageOptions={[1, 2, 3, 4, 5]}
+                    totalRecords={filteredData.length}
+                    onRowClick={(e) => showDetailForm(e.data)}
+                  >
+                    <Column field="patient_id" header="STT" sortable />
+                    <Column field="patient_fullname" header="Họ tên" sortable />
+                    <Column
+                      field="patient_yearOfBirth"
+                      header="Năm sinh"
+                      sortable
+                    />
+                    <Column
+                      field="patient_phone"
+                      header="Số điện thoại"
+                      sortable
+                    />
+                    <Column field="patient_city" header="Địa chỉ" sortable />
+                    <Column
+                      field="latest_update"
+                      header="Thời gian khám"
+                      sortable
+                    />
+                  </DataTable>
+                </div>
+              </div>
+            </div>
+          </SplitterPanel>
+          <SplitterPanel className="flex align-items-center justify-content-center">
+            {showForm && (
+              <Form
+                closeForm={() => {
+                  setShowForm(false);
+                  setShowSplitter(false);
+                  setShowHistoryTable(true);
+                }}
+              />
+            )}
+            {showDetail && (
+              <PatientDetail
+                closeDetail={() => {
+                  setShowDetail(false);
+                  setShowSplitter(false);
+                  setShowHistoryTable(true);
+                }}
+                selectedPatient={selectedPatient}
+              />
+            )}
+          </SplitterPanel>
+        </Splitter>
+      )}
     </div>
   );
 };
