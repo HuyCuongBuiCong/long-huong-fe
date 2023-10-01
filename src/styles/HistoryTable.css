@@ -1,0 +1,23 @@
+.container {
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.container:hover {
+  background: gray;
+  color: white;
+}
+.selected {
+  background: gray;
+  color: white;
+}
+
+.list-patient {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  max-height: 800px;
+}

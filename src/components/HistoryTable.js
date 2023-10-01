@@ -1,89 +1,97 @@
 import React, { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import { BiSearchAlt } from "react-icons/bi";
 import { Button } from "primereact/button";
-import { patientsData } from "../data.js";
-import Form from "./Form";
 import { Splitter, SplitterPanel } from "primereact/splitter";
-import PatientDetail from "./PatientDetail.js";
+import PatientDetail from "./PatientDetail.jsx";
+import PatientForm from "./PatientForm.js";
+import { Dialog } from "primereact/dialog";
+import "../styles/HistoryTable.css";
 import axios from "axios";
-import { Calendar } from "primereact/calendar";
+import "primeicons/primeicons.css";
+import MedicalExDetail from "./MedicalExDetail.js";
+import { Paginator } from "primereact/paginator";
 
 const HistoryTable = () => {
-  const [posts, setPosts] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [selectedContainer, setSelectedContainer] = useState(null);
+  const [showSplitter, setShowSplitter] = useState(false);
+  const [showHistoryTable, setShowHistoryTable] = useState(true);
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [showPatientDetail, setShowPatientDetail] = useState(false);
+  const [selectedExamination, setSelectedExamination] = useState(null); // Add state to track selected examination
 
-  const [showForm, setShowForm] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [showSplitter, setShowSplitter] = useState(false); // Khởi tạo showSplitter là false để ẩn Splitter
-  const [showHistoryTable, setShowHistoryTable] = useState(true); // Khởi tạo showHistoryTable là true để hiển thị HistoryTable
-  const [showDetail, setShowDetail] = useState(false); // Khởi tạo showDetail là false
-
-  const [filteredData, setFilteredData] = useState(patientsData);
+  const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [nextPage, setNextPage] = useState(null);
+  const [previousPage, setPreviousPage] = useState(null);
+  const [lastPage, setLastPage] = useState(1);
 
-  const [customers, setCustomers] = useState(null);
-  const customFilter = (value, filter) => {
-    if (!filter.startDate || !filter.endDate) {
-      return true;
+  const onPageChange = async (event) => {
+    // console.log(total, "sdvvds");
+    setCurrentPage(event.page + 1);
+  };
+
+  const [medicalRecords, setMedicalRecords] = useState([]);
+
+  const handleFilter = async (e) => {
+    const pt = e.target.value;
+    console.log(pt);
+    try {
+      const response = await axios.get(
+        `/patients?page=${currentPage}&limit=10&search=${pt}`
+      );
+      console.log(response);
+      setMedicalRecords(response.data.patients.data);
+      setTotal(response.data.patients.total);
+      setCurrentPage(response.data.patients.currentPage);
+      setNextPage(response.data.patients.nextPage);
+      setPreviousPage(response.data.patients.previousPage);
+      setLastPage(response.data.patients.lastPage);
+      setSelectedExamination(null);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-
-    const date = new Date(value);
-    return filter.startDate <= date && date <= filter.endDate;
   };
 
-  const onPageChange = (event) => {
-    setCurrentPage(event.page + 1); // Trong PrimeReact, trang bắt đầu từ 0, nhưng currentPage thường bắt đầu từ 1
-  };
-
-  const itemsPerPage = 5; // Số mục trên mỗi trang
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const visibleData = filteredData.slice(startIndex, endIndex);
-
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
-
-  const handleFilter = (e) => {
-    setFilters({
-      global: {
-        value: e.target.value,
-        matchMode: FilterMatchMode.CONTAINS,
-      },
-    });
-
-    const filteredPatients = patientsData.filter((patient) =>
-      Object.values(patient).some((field) =>
-        String(field).toLowerCase().includes(e.target.value.toLowerCase())
-      )
-    );
-
-    setFilteredData(filteredPatients);
-  };
+  useEffect(() => {
+    console.log("sdvsdvds")
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `/patients?page=${currentPage}&limit=10&search=`
+        );
+        setMedicalRecords(response.data.patients.data);
+        setTotal(response.data.patients.total);
+        setCurrentPage(response.data.patients.currentPage);
+        setNextPage(response.data.patients.nextPage);
+        setPreviousPage(response.data.patients.previousPage);
+        setLastPage(response.data.patients.lastPage);
+        // console.log(total, "total");
+        // console.log(currentPage, "cur");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [currentPage]);
 
   const showDetailForm = (patient) => {
-    setSelectedPatient(patient);
-    setShowForm(false);
+    setSelectedContainer(patient.patient_id);
+    setSelectedPatientId(patient.patient_id);
     setShowSplitter(true);
     setShowHistoryTable(false);
     setShowDetail(true);
+    setShowPatientDetail(true);
+    setSelectedExamination(null);
   };
 
-  const header = (
-    <div className="flex justify-content-end">
-      <span className="p-input-icon-left">
-        <i className="pi pi-search" />
-        <InputText placeholder="Keyword Search" />
-      </span>
-    </div>
-  );
+  const handleAddPatientClick = () => {
+    setVisible(true);
+  };
 
   return (
     <div className="App">
@@ -104,95 +112,81 @@ const HistoryTable = () => {
             &nbsp;
             <Button
               icon="pi pi-plus"
-              label="Tạo mới"
+              label="Thêm bệnh nhân"
               severity="info"
-              onClick={() => {
-                setShowForm(true);
-                setShowSplitter(true);
-                setShowHistoryTable(false);
-                setShowDetail(false);
-              }}
+              onClick={handleAddPatientClick}
             />
+            <Dialog
+              header="Thêm bệnh nhân"
+              visible={visible}
+              style={{ width: "50vw" }}
+              onHide={() => setVisible(false)}
+            >
+              <PatientForm
+                closeForm={() => setVisible(false)}
+                onSubmit={() => {
+                  setVisible(false);
+                }}
+              />
+            </Dialog>
           </div>{" "}
           <div className="p-d-flex mt-3">
-            <div className="p-col-9">
-              <DataTable
-                value={filteredData}
-                sortMode="multiple"
-                filters={filters}
-                filterDisplay="row"
-                paginator
-                rows={5}
-                rowsPerPageOptions={[1, 2, 3, 4, 5]}
-                totalRecords={filteredData.length}
-                onRowClick={(e) => showDetailForm(e.data)}
-              >
-                <Column field="patient_id" header="STT" sortable />
-                <Column
-                  field="patient_fullname"
-                  header="Họ tên"
-                  filter
-                  filterPlaceholder="Nhập tên bệnh nhân"
-                  sortable
-                />
-                <Column
-                  field="patient_yearOfBirth"
-                  header="Năm sinh"
-                  sortable
-                  filter
-                  filterPlaceholder="Nhập năm sinh hoặc tuổi"
-                />
-                <Column
-                  field="patient_phone"
-                  header="Số điện thoại"
-                  sortable
-                  filter
-                  filterPlaceholder="Nhập số điện thoại"
-                />
-                <Column
-                  field="patient_city"
-                  header="Địa chỉ"
-                  sortable
-                  filter
-                  filterPlaceholder="Nhập địa chỉ"
-                />
-                <Column
-                  field="latest_update"
-                  header="Thời gian khám"
-                  sortable
-                  style={{ minWidth: "12rem" }}
-                  filter
-                  filterElement={
-                    <div className="p-inputgroup">
-                      <Calendar
-                        style={{ width: 150 }}
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.value)}
-                        dateFormat="dd/mm/yy"
-                        placeholder="Từ ngày"
-                        showIcon
-                      />
-                      &nbsp;
-                      <Calendar
-                        style={{ width: 150 }}
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.value)}
-                        dateFormat="dd/mm/yy"
-                        showIcon
-                        placeholder="To"
-                      />
-                    </div>
-                  }
-                  filterFunction={customFilter}
-                />
-              </DataTable>
+            <div className="card">
+              {medicalRecords.length > 0 ? (
+                <>
+                  <DataTable
+                    value={medicalRecords}
+                    first={(currentPage - 1) * 10}
+                    rows={10}
+                    rowsPerPageOptions={[10, 20, 30]}
+                    totalRecords={total}
+                    onPageChange={onPageChange}
+                    onRowClick={(e) => showDetailForm(e.data)}
+                  >
+                    <Column field="patient_id" header="STT" sortable></Column>
+                    <Column
+                      field="patient_fullname"
+                      header="Họ tên"
+                      sortable
+                    ></Column>
+                    <Column
+                      field="patient_yearOfBirth"
+                      header="Năm sinh"
+                      sortable
+                    ></Column>
+                    <Column
+                      field="patient_phone"
+                      header="Số điện thoại"
+                      sortable
+                    ></Column>
+                    <Column
+                      field="patient_ward"
+                      header="Địa chỉ"
+                      sortable
+                    ></Column>
+                  </DataTable>
+                  <Paginator
+                    first={(currentPage - 1) * 10}
+                    rows={10}
+                    totalRecords={total}
+                    rowsPerPageOptions={[10, 20, 30]}
+                    onPageChange={onPageChange}
+                  />
+                </>
+              ) : (
+                <p>Đang tải danh sách bệnh nhân.</p>
+              )}
             </div>
           </div>
         </div>
       )}
       {showSplitter && (
         <Splitter style={{ height: "100%" }}>
-          <SplitterPanel className="flex align-items-center justify-content-center">
+          <SplitterPanel
+            size={20}
+            style={{ fontSize: 16, margin: 5 }}
+            className="flex align-items-center justify-content-center"
+          >
             <div>
               <h4 className="mt-3">Danh sách bệnh nhân</h4>
               <div className="p-d-flex p-jc-end">
@@ -206,70 +200,84 @@ const HistoryTable = () => {
                 </span>
                 &nbsp;
                 <Button
+                  className="mt-1"
                   icon="pi pi-plus"
-                  label="Tạo mới"
+                  label="Thêm bệnh nhân"
                   severity="info"
                   onClick={() => {
-                    setShowForm(true);
-                    setShowDetail(false);
+                    setShowPatientDetail(false);
+                    setShowDetail(true);
+                    handleAddPatientClick(true);
                   }}
                 />
+                <Dialog
+                  header="Thêm bệnh nhân"
+                  visible={visible}
+                  style={{ width: "50vw" }}
+                  onHide={() => setVisible(false)}
+                >
+                  <PatientForm
+                    closeForm={() => setVisible(false)}
+                    onSubmit={() => {
+                      setVisible(false);
+                    }}
+                  />
+                </Dialog>
               </div>{" "}
               <div className="p-d-flex mt-2">
-                <div className="p-col-9">
-                  <DataTable
-                    value={filteredData}
-                    sortMode="multiple"
-                    filters={filters}
-                    paginator
-                    rows={5}
-                    rowsPerPageOptions={[1, 2, 3, 4, 5]}
-                    totalRecords={filteredData.length}
-                    onRowClick={(e) => showDetailForm(e.data)}
-                  >
-                    <Column field="patient_id" header="STT" sortable />
-                    <Column field="patient_fullname" header="Họ tên" sortable />
-                    <Column
-                      field="patient_yearOfBirth"
-                      header="Năm sinh"
-                      sortable
-                    />
-                    <Column
-                      field="patient_phone"
-                      header="Số điện thoại"
-                      sortable
-                    />
-                    <Column field="patient_city" header="Địa chỉ" sortable />
-                    <Column
-                      field="latest_update"
-                      header="Thời gian khám"
-                      sortable
-                    />
-                  </DataTable>
+                <div className="p-col-9 list-patient">
+                  {medicalRecords.length > 0 ? (
+                    medicalRecords.map((patient) => (
+                      <div
+                        className={`container ${
+                          patient.patient_id === selectedContainer
+                            ? "selected"
+                            : ""
+                        }`}
+                        key={patient.patient_id}
+                        onClick={() => showDetailForm(patient)}
+                      >
+                        <p>
+                          {patient.patient_fullname} -{" "}
+                          {patient.patient_yearOfBirth}
+                        </p>
+                        <p>
+                          {patient.patient_phone} - {patient.patient_ward}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ margin: 10 }}>Đang tải danh sách bệnh nhân.</p>
+                  )}
                 </div>
               </div>
             </div>
           </SplitterPanel>
-          <SplitterPanel className="flex align-items-center justify-content-center">
-            {showForm && (
-              <Form
-                closeForm={() => {
-                  setShowForm(false);
-                  setShowSplitter(false);
-                  setShowHistoryTable(true);
-                }}
-              />
-            )}
-            {showDetail && (
+          <SplitterPanel
+            size={80}
+            className="flex align-items-center justify-content-center"
+          >
+            {selectedPatientId && !selectedExamination ? (
               <PatientDetail
+                // to="/patient_detail"
+                selectedPatientId={selectedPatientId}
                 closeDetail={() => {
                   setShowDetail(false);
                   setShowSplitter(false);
                   setShowHistoryTable(true);
+                  setShowPatientDetail(false);
+                  setSelectedExamination(null);
                 }}
-                selectedPatient={selectedPatient}
               />
-            )}
+            ) : null}
+            {selectedExamination &&
+            selectedExamination.patient_id === selectedPatientId ? (
+              <MedicalExDetail
+                selectedExamination={selectedExamination}
+                closeDetail={() => setSelectedExamination(null)}
+                selectedPatientId={selectedPatientId}
+              />
+            ) : null}
           </SplitterPanel>
         </Splitter>
       )}
