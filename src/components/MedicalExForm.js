@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { AutoComplete } from "primereact/autocomplete";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import beAxios from "../config.js";
 
 const MedicalExForm = ({ selectedPatientId, onPrescriptionChange }) => {
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ const MedicalExForm = ({ selectedPatientId, onPrescriptionChange }) => {
     };
 
     try {
-      const res = await axios.post(
+      const res = await beAxios.post(
         `/medical-records/${selectedPatientId}`,
         data
       );
@@ -132,7 +133,7 @@ const MedicalExForm = ({ selectedPatientId, onPrescriptionChange }) => {
   };
 
   useEffect(() => {
-    axios
+    beAxios
       .get(`/patients?search=`)
       .then((response) => {
         if (response && response.data) {

@@ -9,6 +9,7 @@ import "../styles/Form.css";
 import "primeicons/primeicons.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import beAxios from "../config.js";
 
 const PatientForm = ({ closeForm, onSubmit }) => {
   const [fullname, setFullname] = useState("");
@@ -106,7 +107,7 @@ const PatientForm = ({ closeForm, onSubmit }) => {
       : null;
 
     try {
-      const res = await axios.post(`/patients`, {
+      const res = await beAxios.post(`/patients`, {
         fullname: fullname,
         yearOfBirth: yearOfBirth,
         gender: gender,

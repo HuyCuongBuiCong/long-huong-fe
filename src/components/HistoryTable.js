@@ -13,6 +13,7 @@ import axios from "axios";
 import "primeicons/primeicons.css";
 import MedicalExDetail from "./MedicalExDetail.js";
 import { Paginator } from "primereact/paginator";
+import beAxios from "../config.js";
 
 const HistoryTable = () => {
   const [visible, setVisible] = useState(false);
@@ -22,7 +23,7 @@ const HistoryTable = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [showPatientDetail, setShowPatientDetail] = useState(false);
-  const [selectedExamination, setSelectedExamination] = useState(null); // Add state to track selected examination
+  const [selectedExamination, setSelectedExamination] = useState(null);
 
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +32,6 @@ const HistoryTable = () => {
   const [lastPage, setLastPage] = useState(1);
 
   const onPageChange = async (event) => {
-    // console.log(total, "sdvvds");
     setCurrentPage(event.page + 1);
   };
 
@@ -41,7 +41,7 @@ const HistoryTable = () => {
     const pt = e.target.value;
     console.log(pt);
     try {
-      const response = await axios.get(
+      const response = await beAxios.get(
         `/patients?page=${currentPage}&limit=10&search=${pt}`
       );
       console.log(response);
@@ -58,10 +58,9 @@ const HistoryTable = () => {
   };
 
   useEffect(() => {
-    console.log("sdvsdvds")
     const fetchData = async () => {
       try {
-        const response = await axios.get(
+        const response = await beAxios.get(
           `/patients?page=${currentPage}&limit=10&search=`
         );
         setMedicalRecords(response.data.patients.data);

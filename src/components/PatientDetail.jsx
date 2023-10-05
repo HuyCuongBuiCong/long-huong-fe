@@ -6,6 +6,7 @@ import { Dialog } from "primereact/dialog";
 import MedicalExDetail from "./MedicalExDetail.js";
 import { format } from "date-fns";
 import axios from "axios";
+import beAxios from "../config.js";
 
 const PatientDetail = ({ selectedPatientId, closeDetail }) => {
   const [visible, setVisible] = useState(false);
@@ -41,12 +42,12 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
     const fetchData = async () => {
       try {
         if (selectedPatientId) {
-          const patientResponse = await axios.get(
+          const patientResponse = await beAxios.get(
             `/patients/${selectedPatientId}`
           );
           setSelectedPatient(patientResponse.data);
 
-          const medicalRecordsResponse = await axios.get(
+          const medicalRecordsResponse = await beAxios.get(
             `/medical-records/patient/${selectedPatientId}`
           );
           const sortedMedicalRecords = medicalRecordsResponse.data.sort(
