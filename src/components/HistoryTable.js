@@ -92,6 +92,15 @@ const HistoryTable = () => {
     setVisible(true);
   };
 
+  const yearOfBirthTemplate = (data) => {
+    const age = new Date().getFullYear() - data.patient_yearOfBirth;
+    return <p>{data.patient_yearOfBirth}, {age} tuổi</p>
+  }
+
+  const addressTemplate = (data) => {
+    return <p>{data.patient_ward}, {data.patient_city}</p>
+  }
+
   return (
     <div className="App">
       {showHistoryTable && (
@@ -149,7 +158,7 @@ const HistoryTable = () => {
                       sortable
                     ></Column>
                     <Column
-                      field="patient_yearOfBirth"
+                      body={yearOfBirthTemplate}
                       header="Năm sinh"
                       sortable
                     ></Column>
@@ -159,7 +168,7 @@ const HistoryTable = () => {
                       sortable
                     ></Column>
                     <Column
-                      field="patient_ward"
+                      body={addressTemplate}
                       header="Địa chỉ"
                       sortable
                     ></Column>
