@@ -69,15 +69,16 @@ const Layout = (props) => {
     //init body click event fot toggle rightbar
     document.body.addEventListener('click', hideRightbar, true);
 
-    if (isPreloader === true) {
-      document.getElementById('preloader').style.display = 'block';
+    // if (isPreloader === true) {
+    //   document.getElementById('preloader').style.display = 'block';
+    //
+    //   setTimeout(function () {
+    //     document.getElementById('preloader').style.display = 'none';
+    //   }, 2500);
+    // } else {
+    //   document.getElementById('preloader').style.display = 'none';
+    // }
 
-      setTimeout(function () {
-        document.getElementById('preloader').style.display = 'none';
-      }, 2500);
-    } else {
-      document.getElementById('preloader').style.display = 'none';
-    }
     // eslint-disable-next-line
   }, [isPreloader]);
 
@@ -136,17 +137,17 @@ const Layout = (props) => {
 
   return (
     <React.Fragment>
-      <div className="pace pace-active" id="preloader">
-        <div
-          className="pace-progress"
-          data-progress-text="100%"
-          data-progress="99"
-          style={{ transform: 'translate3d(100%, 0px, 0px)' }}
-        >
-          <div className="pace-progress-inner"></div>
-        </div>
-        <div className="pace-activity"></div>
-      </div>
+      {/*<div className="pace pace-active" id="preloader">*/}
+      {/*  <div*/}
+      {/*    className="pace-progress"*/}
+      {/*    data-progress-text="100%"*/}
+      {/*    data-progress="99"*/}
+      {/*    style={{ transform: 'translate3d(100%, 0px, 0px)' }}*/}
+      {/*  >*/}
+      {/*    <div className="pace-progress-inner"></div>*/}
+      {/*  </div>*/}
+      {/*  <div className="pace-activity"></div>*/}
+      {/*</div>*/}
 
       <div id="layout-wrapper">
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
