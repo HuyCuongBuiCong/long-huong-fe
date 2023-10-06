@@ -87,7 +87,7 @@ const Header = (props) => {
               className="btn btn-sm px-3 font-size-16 header-item"
               id="vertical-menu-btn"
             >
-              <i className="fa fa-fw fa-bars"></i>{' '}
+              <i className="pi pi-bars"></i>{' '}
               <span className="page-name fw-bold text-primary ms-3 fs-4">{CLINIC_NAME}</span>
             </button>
           </div>
