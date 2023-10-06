@@ -1,0 +1,39 @@
+.error-msg {
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: $danger;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+  .p-inputtext {
+    width: 100%;
+    display: block;
+  }
+  .p-dropdown, .p-multiselect {
+    width: 100%;
+  }
+}
+
+.patient-list {
+  .p-dataview {
+    &.p-dataview-list {
+      .p-dataview-content {
+        .patient-item {
+          cursor: pointer;
+          padding: 0.5rem;
+          border: 1px solid $gray-400;
+          border-radius: $border-radius;
+          margin-bottom: 0.5rem;
+          &:hover {
+            background: $gray-300;
+          }
+          &.active {
+            background: lighten($warning, 10);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,8 @@
-
 //Core files
-@import "./node_modules/bootstrap/scss/functions";
-@import "./node_modules/bootstrap/scss/variables";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
 @import "variables";
-@import "./node_modules/bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 @import "custom/components/reboot";
 @import "custom/components/alerts";
@@ -19,3 +18,7 @@
 @import "custom/components/pagination";
 @import "custom/components/progress";
 @import "custom/components/shadow";
+
+label {
+  font-weight: normal;
+}

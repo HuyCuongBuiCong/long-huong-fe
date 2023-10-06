@@ -1,12 +1,6 @@
 //Fonts
 @import "custom/fonts/fonts";
 
-//Core files
-@import "./node_modules/bootstrap/scss/functions";
-@import "./node_modules/bootstrap/scss/variables";
-@import "variables";
-@import "./node_modules/bootstrap/scss/mixins.scss";
-
 // Structure
 @import "custom/structure/general";
 @import "custom/structure/topbar";
@@ -28,6 +22,8 @@
 @import "custom/components/toasts";
 @import "custom/components/demos";
 @import "custom/components/print";
+
+@import "custom/components/patient";
 
 // Plugins
 @import "custom/plugins/custom-scrollbar";

@@ -30,6 +30,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Redux Store
 import { showRightSidebarAction, toggleLeftmenu, changeSidebarType, changelayoutMode } from '../../store/actions';
+import { CLINIC_NAME } from '../../constants/commons';
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -42,14 +43,14 @@ const Header = (props) => {
 
   /*** Sidebar menu icon and default menu set */
   function tToggle() {
-    var body = document.body;
+    const body = document.body;
     setClick(!isClick);
     if (isClick === true) {
-      body.classList.add('sidebar-enable');
-      document.body.setAttribute('data-sidebar-size', 'sm');
-    } else {
       body.classList.remove('sidebar-enable');
       document.body.setAttribute('data-sidebar-size', 'lg');
+    } else {
+      body.classList.add('sidebar-enable');
+      document.body.setAttribute('data-sidebar-size', 'sm');
     }
   }
 
@@ -64,7 +65,7 @@ const Header = (props) => {
                   <img src={logoSvg} alt="" height="24" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">Clinic</span>
+                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">{CLINIC_NAME}</span>
                 </span>
               </Link>
 
@@ -73,7 +74,7 @@ const Header = (props) => {
                   <img src={logoSvg} alt="" height="24" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">Clinic</span>
+                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">{CLINIC_NAME}</span>
                 </span>
               </Link>
             </div>
@@ -86,11 +87,12 @@ const Header = (props) => {
               className="btn btn-sm px-3 font-size-16 header-item"
               id="vertical-menu-btn"
             >
-              <i className="fa fa-fw fa-bars"></i>
+              <i className="fa fa-fw fa-bars"></i>{' '}
+              <span className="page-name fw-bold text-primary ms-3 fs-4">{CLINIC_NAME}</span>
             </button>
           </div>
 
-          <div className="d-flex">
+          <div className="d-flex d-none">
             {/* light / dark mode */}
             <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} />
 

@@ -1,23 +1,21 @@
 import React from 'react';
-
-//import Breadcrumbs
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 
 import { Container } from 'reactstrap';
 import { CLINIC_NAME } from '../../constants/commons';
+import MainPage from '../../components/app/MainPage';
 
-const Dashboard = () => {
+const HomePage = () => {
   document.title = 'Home page | ' + CLINIC_NAME;
   return (
-    <React.Fragment>
+    <>
       <div className="page-content">
-        <Container fluid>
-          {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Home page" breadcrumbItem="Home page" />
+        <Container fluid className="h-100">
+          <MainPage />
         </Container>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
-export default Dashboard;
+export default HomePage;

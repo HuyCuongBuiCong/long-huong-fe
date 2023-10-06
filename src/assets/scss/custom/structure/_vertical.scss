@@ -227,7 +227,7 @@
 
 // Enlarge menu
 body[data-sidebar-size="sm"] {
-    min-height: 1000px;
+    //min-height: 1000px;
 
     .main-content {
         margin-left: $sidebar-collapsed-width;
@@ -249,7 +249,7 @@ body[data-sidebar-size="sm"] {
 
     // Side menu
     .vertical-menu {
-        position: absolute;
+        //position: absolute;
         width: $sidebar-collapsed-width !important;
         z-index: 5;
 

@@ -1,19 +1,16 @@
-@import "./icons.scss";
+//@import "./icons.scss";
 
-// Light Theme
-@import "./bootstrap.scss";
+@import "bootstrap";
+
+// Core files
+@import "~primereact/resources/themes/saga-blue/theme.css";
+@import "~primereact/resources/primereact.css";
+@import "~primeicons/primeicons.css";
+
 @import "./app.scss";
 
-// RTL
-// @import "custom/rtl/general-rtl";
-// @import "custom/rtl/bootstrap-rtl";
-// @import "custom/rtl/spacing-rtl";
-// @import "custom/rtl/float-rtl";
-// @import "custom/rtl/text-rtl";
-// @import "custom/rtl/structure-rtl";
-// @import "custom/rtl/plugins-rtl";
-// @import "custom/rtl/components-rtl";
-// @import "custom/rtl/pages-rtl";
+@import "./custom/primereact/dialog";
+
 
 body {
   * {

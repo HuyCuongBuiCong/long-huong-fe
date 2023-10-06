@@ -64,6 +64,9 @@ body:not([data-sidebar-size="sm"]) {
         @media (max-width: 991.98px){
             margin-left: 0;
         }
+        .page-name {
+            display: none;
+        }
     }
 }
 
@@ -134,6 +137,8 @@ body[data-layout-mode="dark"] {
 
 .page-content {
     padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+    height: 100vh;
+    padding-bottom: $grid-gutter-width;
 }
 
 .header-item {

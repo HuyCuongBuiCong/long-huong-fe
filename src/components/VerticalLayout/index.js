@@ -13,8 +13,8 @@ import {
 // Layout Related Components
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Footer from './Footer';
-import RightSidebar from '../CommonForBoth/RightSidebar';
+// import Footer from './Footer';
+// import RightSidebar from '../CommonForBoth/RightSidebar';
 
 //redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -154,10 +154,10 @@ const Layout = (props) => {
         <Sidebar theme={leftSideBarTheme} type={leftSideBarType} isMobile={isMobile} />
         <div className="main-content">
           {props.children}
-          <Footer />
+          {/*<Footer />*/}
         </div>
       </div>
-      {showRightSidebar ? <RightSidebar onChangeLayoutMode={onChangeLayoutMode} /> : ''}
+      {/*{showRightSidebar ? <RightSidebar onChangeLayoutMode={onChangeLayoutMode} /> : ''}*/}
     </React.Fragment>
   );
 };
