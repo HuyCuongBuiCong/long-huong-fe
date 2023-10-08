@@ -8,7 +8,6 @@ import FormikErrorMessage from '../../Common/FormikErrorMessage';
 import { useFormik } from 'formik';
 import classNames from 'classnames';
 import * as Yup from 'yup';
-import dayjs from 'dayjs';
 import _ from 'lodash';
 
 const validationSchema = Yup.object().shape({

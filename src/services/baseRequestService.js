@@ -14,6 +14,7 @@ class BaseRequestService {
     instance.interceptors.response.use(this.handleSuccess, this.handleError);
     instance.defaults.headers.common = {
       'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 1,
       ...customHeader
     };
     this.instance = instance;

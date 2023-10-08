@@ -1,5 +1,4 @@
 import React from 'react';
-import Breadcrumbs from '../../components/Common/Breadcrumb';
 
 import { Container } from 'reactstrap';
 import { CLINIC_NAME } from '../../constants/commons';

@@ -3,32 +3,51 @@ import classnames from 'classnames';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { DataView } from 'primereact/dataview';
-import { getPatients } from '../../../services/patientService';
+import patientService from '../../../services/patientService';
 import Loading from '../../Common/Loading';
 import PatientDialog from './PatientDialog';
+import { useDebounce } from 'primereact/hooks';
+
+const ROWS_PER_PAGE = 10;
 
 const PatientList = (props) => {
   const [loading, setLoading] = useState(false);
-  const [globalSearchText, setGlobalSearchText] = useState('');
+  const [globalSearchText, debouncedGlobalSearchText, setGlobalSearchText] = useDebounce('', 400);
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [pagination, setPagination] = useState({
-    first: 0,
-    rows: 10
+    currentPage: 1,
+    rows: ROWS_PER_PAGE,
+    total: 0,
+    first: 0
   });
 
   const [showPatientDialog, setShowPatientDialog] = useState(false);
 
   useEffect(() => {
+    const filter = {
+      search: globalSearchText
+    };
+    handleGetPatients(filter);
+  }, [debouncedGlobalSearchText]);
+
+  const handleGetPatients = (filter) => {
     setLoading(true);
-    getPatients()
-      .then((patients) => {
-        setPatients(patients);
+    patientService
+      .getPatients(filter)
+      .then((patientData) => {
+        setPatients(patientData.data);
+        setPagination({
+          ...pagination,
+          total: patientData.total,
+          first: pagination.rows * (patientData.currentPage - 1),
+          currentPage: patientData.currentPage
+        });
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  };
 
   const onSelectPatient = (patient) => {
     setSelectedPatient(patient);
@@ -37,8 +56,14 @@ const PatientList = (props) => {
     }
   };
 
-  const onPageChange = (e) => {
+  const onPage = (e) => {
     console.log(e);
+    const filter = {
+      search: globalSearchText,
+      page: e.page + 1,
+      limit: ROWS_PER_PAGE
+    };
+    handleGetPatients(filter);
   };
 
   const onShowDialogCreatePatient = () => {
@@ -53,14 +78,14 @@ const PatientList = (props) => {
     return (
       <div
         className={classnames('patient-item', {
-          active: selectedPatient && selectedPatient.id === patient.id
+          active: selectedPatient && selectedPatient.patient_id === patient.patient_id
         })}
         onClick={() => onSelectPatient(patient)}
       >
         <div>
-          {patient.name} - {patient.yearOfBirth}
+          {patient.patient_fullname} - {patient.patient_yearOfBirth}
         </div>
-        <div>{patient.phoneNumber}</div>
+        <div>{patient.patient_phone}</div>
       </div>
     );
   };
@@ -79,18 +104,20 @@ const PatientList = (props) => {
         </div>
       </div>
       <div className="patient-list pt-3">
-        {loading && <Loading />}
-        {!loading && patients && (
+        {loading && !patients && <Loading />}
+        {patients && (
           <DataView
             className="border-0 p-0"
             value={patients}
             itemTemplate={patientItemTemplate}
+            lazy={true}
+            loading={loading}
             paginator
             paginatorClassName="border-0 p-0"
             first={pagination.first}
             rows={pagination.rows}
-            totalRecords={120}
-            onPageChange={onPageChange}
+            totalRecords={pagination.total}
+            onPage={onPage}
           />
         )}
       </div>

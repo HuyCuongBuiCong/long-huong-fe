@@ -19,7 +19,9 @@ const MainPage = (props) => {
           </div>
         </SplitterPanel>
         <SplitterPanel className="flex align-items-center justify-content-center" size={75} minSize={50}>
-          <div className="p-2 h-100">{selectedPatient && <PatientDetails patientId={selectedPatient.id} />}</div>
+          <div className="p-2 h-100">
+            {selectedPatient && <PatientDetails patientId={selectedPatient.patient_id} />}
+          </div>
         </SplitterPanel>
       </Splitter>
     </div>
