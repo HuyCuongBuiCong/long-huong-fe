@@ -3,22 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/react": "^18.2.25",
-    "@types/react-dom": "^18.2.10",
-    "antd": "^5.8.5",
-    "axios": "^1.5.0",
-    "date-fns": "^2.30.0",
-    "dotenv": "^16.3.1",
-    "formik": "^2.4.3",
-=======
     "@iconscout/react-unicons": "^1.1.6",
     "@reduxjs/toolkit": "^1.9.3",
     "axios": "^1.5.0",
     "bootstrap": "^5.1.3",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "env-cmd": "^10.1.0",
     "feather-icons-react": "^0.6.2",
@@ -27,7 +16,6 @@
     "i18next-browser-languagedetector": "^6.1.2",
     "lodash": "^4.17.21",
     "metismenujs": "^1.3.1",
->>>>>>> a9f051a557aab60e256f92a3b13e46a3324649ae
     "primeicons": "^6.0.1",
     "primereact": "^9.6.2",
     "prop-types": "^15.8.1",
@@ -38,16 +26,9 @@
     "react-debounce-input": "^3.3.0",
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
-    "react-hot-toast": "^2.4.1",
-    "react-icons": "^4.10.1",
-    "react-redux": "^8.1.2",
-    "react-router-dom": "^6.15.0",
-=======
     "react-i18next": "^11.11.4",
     "react-redux": "^8.0.5",
     "react-router-dom": "^5.3.4",
->>>>>>> a9f051a557aab60e256f92a3b13e46a3324649ae
     "react-scripts": "5.0.1",
     "reactstrap": "^9.2.0",
     "redux": "^4.2.1",

@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Homepage from "./pages/Homepage";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
-import PatientDetail from "./components/PatientDetail";
-import HistoryTable from "./components/HistoryTable";
-
-function App() {
-  console.log(process.env.REACT_APP_BACKEND_URL);
-  console.log("ahihi");
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Homepage />}>
-            <Route path="/patient_detail" element={<PatientDetail />} />
-          </Route>
-          <Route path="/history_table" element={<HistoryTable />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-=======
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -73,7 +50,6 @@ const App = () => {
         </Switch>
       </Router>
     </React.Fragment>
->>>>>>> a9f051a557aab60e256f92a3b13e46a3324649ae
   );
 };
 

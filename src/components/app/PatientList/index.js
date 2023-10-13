@@ -75,6 +75,9 @@ const PatientList = (props) => {
   };
 
   const patientItemTemplate = (patient) => {
+    const yearOfBirth = patient.patient_yearOfBirth ? new Date(patient.patient_yearOfBirth).getFullYear() : '';
+    const age = yearOfBirth ? new Date().getFullYear() - yearOfBirth : '';
+
     return (
       <div
         className={classnames('patient-item', {
@@ -83,9 +86,12 @@ const PatientList = (props) => {
         onClick={() => onSelectPatient(patient)}
       >
         <div>
-          {patient.patient_fullname} - {patient.patient_yearOfBirth}
+          {patient.patient_fullname} - {yearOfBirth}, {age} tuổi
         </div>
         <div>{patient.patient_phone}</div>
+        <div>
+          {patient.patient_ward}, {patient.patient_city}
+        </div>
       </div>
     );
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
 import PatientList from '../PatientList';
 import PatientDetails from '../PatientDetails';
@@ -19,7 +19,7 @@ const MainPage = (props) => {
           </div>
         </SplitterPanel>
         <SplitterPanel className="flex align-items-center justify-content-center" size={75} minSize={50}>
-          <div className="p-2 h-100">
+          <div className="p-2 h-100 overflow-auto">
             {selectedPatient && <PatientDetails patientId={selectedPatient.patient_id} />}
           </div>
         </SplitterPanel>

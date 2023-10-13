@@ -103,9 +103,9 @@ const SidebarContent = (props) => {
               </Link>
             </li>
             <li>
-              <Link to="/" className="">
+              <Link to="/admin" className="">
                 <FeatherIcon icon="grid" />
-                <span>Page 1</span>
+                <span>{props.t('Admin page')}</span>
               </Link>
             </li>
             <li>

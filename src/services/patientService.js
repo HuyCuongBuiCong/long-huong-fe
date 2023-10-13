@@ -20,7 +20,7 @@ export const getPatients = async (filter) => {
     query = 'search=';
   }
   return baseRequestService.get(`${API_PATH.patients}?${query}`).then((res) => {
-    const patients = res.data?.patients;
+    const patients = res.data;
     console.log('patients: ', patients);
     return patients;
   });
@@ -34,8 +34,44 @@ export const getPatientMedicalRecords = async (patientId) => {
   });
 };
 
+export const getDiseases = async () => {
+  return baseRequestService.get(`${API_PATH.diseases}`).then((res) => {
+    const diseases = res.data;
+    console.log('diseases: ', diseases);
+    return diseases;
+  });
+};
+
+export const getPrescriptions = async () => {
+  return baseRequestService.get(`${API_PATH.prescriptions}`).then((res) => {
+    const prescriptions = res.data;
+    console.log('prescriptions: ', prescriptions);
+    return prescriptions;
+  });
+};
+
+export const addPatient = async (patientId) => {
+  return baseRequestService.post(`${API_PATH.patients}`, patientId).then((res) => {
+    const newPatient = res.data;
+    console.log('New patient added: ', newPatient);
+    return newPatient;
+  });
+};
+
+export const addMedicalExamination = async (patientId, medicalExaminationData) => {
+  return baseRequestService.post(`${API_PATH.medicalRecord}/${patientId}`, medicalExaminationData).then((res) => {
+    const newMedicalExamination = res.data;
+    console.log('New medical examination added: ', newMedicalExamination);
+    return newMedicalExamination;
+  });
+};
+
 export default {
   getPatients,
   getPatient,
-  getPatientMedicalRecords
+  getPatientMedicalRecords,
+  getPrescriptions,
+  getDiseases,
+  addMedicalExamination,
+  addPatient
 };
