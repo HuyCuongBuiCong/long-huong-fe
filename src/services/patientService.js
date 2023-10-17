@@ -51,11 +51,7 @@ export const getPrescriptions = async () => {
 };
 
 export const addPatient = async (patientId) => {
-  return baseRequestService.post(`${API_PATH.patients}`, patientId).then((res) => {
-    const newPatient = res.data;
-    console.log('New patient added: ', newPatient);
-    return newPatient;
-  });
+  return baseRequestService.post(`${API_PATH.patients}`, patientId).then((response) => response.data);
 };
 
 export const addMedicalExamination = async (patientId, medicalExaminationData) => {

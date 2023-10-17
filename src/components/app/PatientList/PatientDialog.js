@@ -93,35 +93,23 @@ const PatientDialog = (props) => {
 
     const selectedDistrictData = districts.find((district) => district.Id === selectedDistrict);
     const districtName = selectedDistrictData ? selectedDistrictData.Name : null;
-
-    try {
-      const res = await addPatient({
-        fullname: fullname,
-        yearOfBirth: yearOfBirth,
-        gender: gender,
-        city: cityName,
-        ward: districtName,
-        phone: phone
-      });
-      console.log(res);
-
-      if (res && res.data) {
+    let formValue = formik.values;
+    addPatient({
+      fullname: formValue.fullname,
+      yearOfBirth: yearOfBirth,
+      gender: gender,
+      city: cityName,
+      ward: districtName,
+      phone: phone
+    })
+      .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
-        formik.resetForm();
-        setFullname('');
-        setYearOfBirth('');
-        setGender('');
-        setPhone('');
-        setSelectedCity(null);
-        setSelectedDistrict(null);
         window.location.reload();
-      } else if (res && res.data.message) {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: res.data.message });
-      }
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
-    }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+      });
   };
 
   useEffect(() => {
@@ -201,9 +189,9 @@ const PatientDialog = (props) => {
               })}
               id="fullname"
               name="fullname"
-              onChange={handleFullnameChange}
+              onChange={formik.handleChange}
               onBlur={handleBlur}
-              value={fullname}
+              value={formik.values.fullname}
               placeholder="Nhập tên bệnh nhân"
             />
             <FormikErrorMessage formik={formik} field="fullname" />
