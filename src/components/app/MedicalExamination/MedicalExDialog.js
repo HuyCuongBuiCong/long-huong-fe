@@ -153,22 +153,22 @@ const MedicalExDialog = (props) => {
       .getDiseases()
       .then((diseaseData) => {
         setDiseases(diseaseData);
-        console.log(diseaseData, '125dr');
+        // console.log(diseaseData, '125dr');
       })
       .catch((error) => {
         console.error('Error fetching diseases:', error);
       });
-    console.log(diseases, 'sggdr');
+    // console.log(diseases, 'sggdr');
     patientService
       .getPrescriptions()
       .then((prescriptionData) => {
         setPrescriptions(prescriptionData);
-        console.log(prescriptionData, 'kajbve');
+        // console.log(prescriptionData, 'kajbve');
       })
       .catch((error) => {
         console.error('Error fetching prescriptions:', error);
       });
-    console.log(prescriptions, 'lakbve');
+    // console.log(prescriptions, 'lakbve');
   }, []);
 
   const handleSubmit = async (e) => {
@@ -194,11 +194,11 @@ const MedicalExDialog = (props) => {
     try {
       const res = await addMedicalExamination(patientId, data);
       console.log(res);
-      if (res && res.data) {
+      if (res && res.data.success) {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm phiêu khám thành công' });
         formik.resetForm();
         window.location.reload();
-      } else if (res && res.data.message) {
+      } else {
         toast.current.show({ severity: 'error', summary: 'Error', detail: res.data.message });
       }
     } catch (error) {

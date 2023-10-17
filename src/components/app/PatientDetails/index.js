@@ -106,7 +106,7 @@ const PatientDetails = (props) => {
                   <th>Số điện thoại: </th>
                   <td>{patient.phone}</td>
                   <th>Địa chỉ: </th>
-                  <td>
+                  <td colspan="2">
                     {patient.ward} - {patient.city}
                   </td>
                 </tr>

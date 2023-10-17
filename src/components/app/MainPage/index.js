@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
 import PatientList from '../PatientList';
 import PatientDetails from '../PatientDetails';
+import { Toaster } from 'react-hot-toast';
 
 const MainPage = (props) => {
   const [selectedPatient, setSelectedPatient] = useState(null);
