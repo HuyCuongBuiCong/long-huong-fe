@@ -1,19 +1,15 @@
-import { format } from "date-fns";
-import React from "react";
+import { format } from 'date-fns';
+import React from 'react';
 
 const MedicalExDetail = ({ selectedExamination, selectedPatientId }) => {
   if (!selectedExamination || selectedExamination.patient_id !== selectedPatientId) {
-    return (
-      <div className="card mt-3">
-        Vui lòng chọn lần khám bệnh để xem chi tiết.
-      </div>
-    );
+    return <div className="card mt-3">Vui lòng chọn lần khám bệnh để xem chi tiết.</div>;
   }
 
   const formatDateTime = (dateTimeString) => {
-    if (!dateTimeString) return "";
+    if (!dateTimeString) return '';
     const dateTime = new Date(dateTimeString);
-    return format(dateTime, "dd/MM/yyyy");
+    return format(dateTime, 'dd/MM/yyyy');
   };
   return (
     <div className="card mt-3">
@@ -24,10 +20,12 @@ const MedicalExDetail = ({ selectedExamination, selectedPatientId }) => {
             <tr>
               <th>Mã - Tên bệnh: </th>
               <td>
-              {selectedExamination.diseases &&
-                selectedExamination.diseases.map((diseases) => (
-                  <p key={diseases.id}>{diseases.diseaseCode} - {diseases.name}</p>
-                ))}
+                {selectedExamination.diseases &&
+                  selectedExamination.diseases.map((diseases) => (
+                    <p key={diseases.id}>
+                      {diseases.diseaseCode} - {diseases.name}
+                    </p>
+                  ))}
               </td>
             </tr>
             <tr>
