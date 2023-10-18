@@ -1,5 +1,5 @@
 import { Toast } from 'primereact/toast';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRef } from 'react';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
@@ -7,6 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Col, Form, FormLabel, Row } from 'react-bootstrap';
 import { InputText } from 'primereact/inputtext';
+import { addPrescriptions } from '../../../services/patientService';
 
 const PrescriptionDialog = (props) => {
   const isUpdateMode = false;
@@ -17,6 +18,33 @@ const PrescriptionDialog = (props) => {
     onSubmit: () => null
   });
   const { touched, errors, values, handleBlur, handleChange, setFieldValue, setFieldTouched } = formik;
+  const [name, setName] = useState('');
+  const [file, setFile] = useState('');
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.value);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await addPrescriptions({
+        name: name,
+        path: file
+      });
+      console.log(res);
+      if (res && res.data) {
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
+      } else if (res && res.data.message) {
+        toast.current.show({ severity: 'error', summary: 'Error', detail: res.data.message });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+    }
+  };
 
   return (
     <>
@@ -37,7 +65,7 @@ const PrescriptionDialog = (props) => {
               type="button"
               label={isUpdateMode ? 'Cập nhật' : 'Lưu'}
               icon="pi pi-check-circle"
-              //   onClick={handleSubmitData}
+              onClick={handleSubmit}
             />
           </div>
         }
@@ -52,13 +80,13 @@ const PrescriptionDialog = (props) => {
           <Col sm={6}>
             <InputText
               className={classNames({
-                'is-invalid': touched.fullname && errors.fullname
+                'is-invalid': touched.name && errors.name
               })}
-              id="fullname"
-              name="fullname"
-              //   onChange={handleFullnameChange}
+              id="name"
+              name="name"
+              onChange={handleNameChange}
               onBlur={handleBlur}
-              //   value={fullname}
+              value={name}
               placeholder="Nhập tên toa thuốc"
             />
           </Col>
@@ -70,9 +98,9 @@ const PrescriptionDialog = (props) => {
           <Col sm={6}>
             <Form.Control
               type="file"
-              //   onChange={handleFileChange}
+              onChange={handleFileChange}
               onBlur={handleBlur}
-              // value={file}
+              value={file}
               placeholder="Chọn file"
             />
           </Col>

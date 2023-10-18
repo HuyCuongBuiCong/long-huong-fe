@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.14.0",
     "@iconscout/react-unicons": "^1.1.6",
     "@reduxjs/toolkit": "^1.9.3",
     "axios": "^1.5.0",

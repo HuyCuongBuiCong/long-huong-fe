@@ -20,7 +20,7 @@ import { InputMask } from 'primereact/inputmask';
 const validationSchema = Yup.object().shape({
   fullname: Yup.string().required('Vui lòng nhập tên bệnh nhân'),
   phone: Yup.string().required('Vui lòng nhập số điện thoại'),
-  yearOfBirth: Yup.number().required('Vui lòng nhập năm sinh'),
+  yearOfBirth: Yup.string().required('Vui lòng nhập năm sinh'),
   gender: Yup.string().required('Vui lòng chọn giới tính'),
   city: Yup.string().required('Vui lòng chọn tỉnh thành'),
   ward: Yup.string().required('Vui lòng chọn quận huyện')
@@ -57,20 +57,8 @@ const PatientDialog = (props) => {
   });
   const { touched, errors, values, handleBlur, handleChange, setFieldValue, setFieldTouched } = formik;
 
-  const handleFullnameChange = (e) => {
-    setFullname(e.target.value);
-  };
-
-  const handleYearOfBirthChange = (e) => {
-    setYearOfBirth(e.target.value);
-  };
-
   const handleGenderChange = (e) => {
     setGender(e.target.value);
-  };
-
-  const handlePhoneChange = (e) => {
-    setPhone(e.target.value);
   };
 
   const getFormData = async () => {
@@ -93,35 +81,23 @@ const PatientDialog = (props) => {
 
     const selectedDistrictData = districts.find((district) => district.Id === selectedDistrict);
     const districtName = selectedDistrictData ? selectedDistrictData.Name : null;
-
-    try {
-      const res = await addPatient({
-        fullname: fullname,
-        yearOfBirth: yearOfBirth,
-        gender: gender,
-        city: cityName,
-        ward: districtName,
-        phone: phone
-      });
-      console.log(res);
-
-      if (res && res.data) {
+    let formValue = formik.values;
+    addPatient({
+      fullname: formValue.fullname,
+      yearOfBirth: formValue.yearOfBirth,
+      gender: gender,
+      city: cityName,
+      ward: districtName,
+      phone: formValue.phone
+    })
+      .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
-        formik.resetForm();
-        setFullname('');
-        setYearOfBirth('');
-        setGender('');
-        setPhone('');
-        setSelectedCity(null);
-        setSelectedDistrict(null);
         window.location.reload();
-      } else if (res && res.data.message) {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: res.data.message });
-      }
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
-    }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+      });
   };
 
   useEffect(() => {
@@ -201,9 +177,9 @@ const PatientDialog = (props) => {
               })}
               id="fullname"
               name="fullname"
-              onChange={handleFullnameChange}
+              onChange={formik.handleChange}
               onBlur={handleBlur}
-              value={fullname}
+              value={formik.values.fullname}
               placeholder="Nhập tên bệnh nhân"
             />
             <FormikErrorMessage formik={formik} field="fullname" />
@@ -248,9 +224,9 @@ const PatientDialog = (props) => {
               name="yearOfBirth"
               view="year"
               dateFormat="yy"
-              onChange={handleYearOfBirthChange}
+              onChange={formik.handleChange}
               onBlur={handleBlur}
-              value={yearOfBirth}
+              value={formik.values.yearOfBirth}
               placeholder="Nhập năm sinh"
             />
             <FormikErrorMessage formik={formik} field="yearOfBirth" />
@@ -266,8 +242,8 @@ const PatientDialog = (props) => {
               name="phone"
               mask="9999999999"
               placeholder="(84)999999999"
-              onChange={handlePhoneChange}
-              value={phone}
+              onChange={formik.handleChange}
+              value={formik.values.phone}
               className={classNames({
                 'is-invalid': touched.phone && errors.phone
               })}

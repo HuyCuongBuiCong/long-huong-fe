@@ -50,6 +50,14 @@ export const getPrescriptions = async () => {
   });
 };
 
+export const addPrescriptions = async (prescriptionData) => {
+  return baseRequestService.post(`${API_PATH.prescriptions}`, prescriptionData).then((res) => {
+    const newPrescription = res.data;
+    console.log('New prescription add: ', newPrescription);
+    return newPrescription;
+  });
+};
+
 export const addPatient = async (patientId) => {
   return baseRequestService.post(`${API_PATH.patients}`, patientId).then((res) => {
     const newPatient = res.data;

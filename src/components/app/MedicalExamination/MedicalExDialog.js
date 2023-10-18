@@ -114,6 +114,7 @@ const MedicalExDialog = (props) => {
     console.log(selectedDisease);
     setSelectedDiseases([...selectedDiseases, selectedDisease]);
     setDiseaseNames([...diseaseNames, selectedDisease.name]);
+    formik.setFieldValue('name', selectedDisease.name);
     formik.setFieldValue('diseaseCode', selectedDisease.diseaseCode);
   };
 
@@ -123,10 +124,10 @@ const MedicalExDialog = (props) => {
       (prescription) => prescription.id !== unselectedPrescription.id
     );
     setSelectedPrescriptions(updatedSelectedPrescription);
-    formik.setFieldValue(
-      'prescriptionIds',
-      formik.values.prescriptionIds.filter((id) => id !== unselectedPrescription.id)
-    );
+    // formik.setFieldValue(
+    //   'prescriptionIds',
+    //   formik.values.prescriptionIds.filter((id) => id !== unselectedPrescription.id)
+    // );
   };
 
   const handleDiseaseUnselect = (e) => {
@@ -184,27 +185,22 @@ const MedicalExDialog = (props) => {
     const data = {
       diseases: selectedDiseasesData,
       prescriptionIds: selectedPrescriptionIds,
-      description: description,
+      description: formik.values.description,
       patient_id: patientId
     };
     console.log(data);
     const formData = new FormData();
     formData.append('file', file);
 
-    try {
-      const res = await addMedicalExamination(patientId, data);
-      console.log(res);
-      if (res && res.data.success) {
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm phiêu khám thành công' });
-        formik.resetForm();
+    addMedicalExamination(patientId, data)
+      .then((response) => {
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
         window.location.reload();
-      } else {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: res.data.message });
-      }
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm phiếu khám' });
-    }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+      });
   };
 
   return (
@@ -319,9 +315,9 @@ const MedicalExDialog = (props) => {
                 id="description"
                 name="description"
                 type="text"
-                onChange={handleDescriptionChange}
+                onChange={formik.handleChange}
                 onBlur={handleBlur}
-                value={description}
+                value={formik.values.description}
                 placeholder="Nhập chuẩn đoán"
                 rows={5}
                 cols={30}

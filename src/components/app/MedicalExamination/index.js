@@ -69,10 +69,7 @@ const MedicalExaminationDetails = ({ selectedMedical, patientId }) => {
               <tr>
                 <th>Tập tin đính kèm: </th>
                 <td>
-                  <ul>
-                    {selectedMedical.attachments &&
-                      selectedMedical.attachments.map((attachment) => <p key={attachment.id}>{attachment.name}</p>)}
-                  </ul>
+                  <ul></ul>
                 </td>
               </tr>
             </tbody>

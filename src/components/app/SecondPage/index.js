@@ -64,7 +64,8 @@ const SecondPage = () => {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">Tên</th>
+                <th scope="col">Tên toa thuốc</th>
+                <th scope="col">File toa thuốc</th>
                 <th scope="col">Hoạt động</th>
               </tr>
             </thead>
@@ -73,7 +74,15 @@ const SecondPage = () => {
                 <>
                   <tr>
                     <td key={c._id}>{c.name}</td>
-
+                    <td>
+                      <a
+                        href={`E:/React/MERN stack/STOREJEANO/client/src/assets/images/emptyCart.png`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Xem tài liệu
+                      </a>
+                    </td>
                     <td>
                       <button
                         className="btn btn-primary ms-2"
