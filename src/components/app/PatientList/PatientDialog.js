@@ -84,11 +84,19 @@ const PatientDialog = (props) => {
     let formValue = formik.values;
     addPatient({
       fullname: formValue.fullname,
+<<<<<<< HEAD
       yearOfBirth: formValue.yearOfBirth,
       gender: gender,
       city: cityName,
       ward: districtName,
       phone: formValue.phone
+=======
+      yearOfBirth: yearOfBirth,
+      gender: gender,
+      city: cityName,
+      ward: districtName,
+      phone: phone
+>>>>>>> 20571f84655d2f26dd683b2f677830e3e5841d0b
     })
       .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
