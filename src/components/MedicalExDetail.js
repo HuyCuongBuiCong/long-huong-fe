@@ -30,7 +30,7 @@ const MedicalExDetail = ({ selectedExamination, selectedPatientId }) => {
             </tr>
             <tr>
               <th>Lần khám: </th>
-              <td>{selectedExamination.index}</td>
+              <td>{selectedExamination.recordNumber}</td>
               <th>Ngày khám: </th>
               <td>{formatDateTime(selectedExamination.date)}</td>
             </tr>

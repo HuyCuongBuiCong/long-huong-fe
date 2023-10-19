@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "primereact/button";
-import MedicalExForm from "./MedicalExForm";
-import "../styles/Form.css";
-import { Dialog } from "primereact/dialog";
-import MedicalExDetail from "./MedicalExDetail.js";
-import { format } from "date-fns";
-import axios from "axios";
-import beAxios from "../config.js";
+import React, { useEffect, useState } from 'react';
+import { Button } from 'primereact/button';
+import MedicalExForm from './MedicalExForm';
+import '../styles/Form.css';
+import { Dialog } from 'primereact/dialog';
+import MedicalExDetail from './MedicalExDetail.js';
+import { format } from 'date-fns';
+import axios from 'axios';
+import beAxios from '../config.js';
 
 const PatientDetail = ({ selectedPatientId, closeDetail }) => {
   const [visible, setVisible] = useState(false);
@@ -33,26 +33,20 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
   };
 
   const formatDateTime = (dateTimeString) => {
-    if (!dateTimeString) return "";
+    if (!dateTimeString) return '';
     const dateTime = new Date(dateTimeString);
-    return format(dateTime, "dd/MM/yyyy");
+    return format(dateTime, 'dd/MM/yyyy');
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (selectedPatientId) {
-          const patientResponse = await beAxios.get(
-            `/patients/${selectedPatientId}`
-          );
+          const patientResponse = await beAxios.get(`/patients/${selectedPatientId}`);
           setSelectedPatient(patientResponse.data);
 
-          const medicalRecordsResponse = await beAxios.get(
-            `/medical-records/patient/${selectedPatientId}`
-          );
-          const sortedMedicalRecords = medicalRecordsResponse.data.sort(
-            (a, b) => a.index - b.index
-          );
+          const medicalRecordsResponse = await beAxios.get(`/medical-records/patient/${selectedPatientId}`);
+          const sortedMedicalRecords = medicalRecordsResponse.data.sort((a, b) => a.index - b.index);
           setMedicalRecords(sortedMedicalRecords);
 
           if (sortedMedicalRecords.length === 0) {
@@ -62,7 +56,7 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
           }
         }
       } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
+        console.error('Lỗi khi lấy dữ liệu:', error);
       }
     };
     if (selectedPatientId) {
@@ -77,13 +71,9 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
 
   return (
     <div className="mt-3">
-      <i
-        style={{ marginLeft: 10 }}
-        className="pi pi-times"
-        onClick={handleDetailClose}
-      />
+      <i style={{ marginLeft: 10 }} className="pi pi-times" onClick={handleDetailClose} />
       <div className="card">
-        <div style={{ display: "flex", alignItems: "center", margin: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', margin: 10 }}>
           <h4 style={{ flex: 1, marginLeft: 10 }}>Thông tin bệnh nhân</h4>
 
           <Button
@@ -98,41 +88,31 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
           <Dialog
             header="Tiếp nhận bệnh mới"
             visible={visible}
-            style={{ width: "50vw" }}
+            style={{ width: '50vw' }}
             onHide={() => setVisible(false)}
           >
-            <MedicalExForm
-              selectedPatientId={selectedPatientId}
-              onPrescriptionChange={handlePrescriptionChange}
-            />
+            <MedicalExForm selectedPatientId={selectedPatientId} onPrescriptionChange={handlePrescriptionChange} />
           </Dialog>
         </div>
         {selectedPatient && (
-        <table
-          className="table table-striped table-sm mt-2"
-          key={selectedPatient?.id}
-        >
-          <tbody>
-            <tr>
-              <th>Họ tên: </th>
-              <td>{selectedPatient.fullname}</td>
-              <th>Năm sinh: </th>
-              <td>{selectedPatient.yearOfBirth}</td>
-              <th>Giới tính: </th>
-              <td>{selectedPatient.gender}</td>
-            </tr>
-            <tr>
-              <th>Số điện thoại: </th>
-              <td>{selectedPatient.phone}</td>
-              <th>Địa chỉ: </th>
-              <td>
-                {selectedPatient
-                  ? `${selectedPatient.ward}, ${selectedPatient.city}`
-                  : ""}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <table className="table table-striped table-sm mt-2" key={selectedPatient?.id}>
+            <tbody>
+              <tr>
+                <th>Họ tên: </th>
+                <td>{selectedPatient.fullname}</td>
+                <th>Năm sinh: </th>
+                <td>{selectedPatient.yearOfBirth}</td>
+                <th>Giới tính: </th>
+                <td>{selectedPatient.gender}</td>
+              </tr>
+              <tr>
+                <th>Số điện thoại: </th>
+                <td>{selectedPatient.phone}</td>
+                <th>Địa chỉ: </th>
+                <td>{selectedPatient ? `${selectedPatient.ward}, ${selectedPatient.city}` : ''}</td>
+              </tr>
+            </tbody>
+          </table>
         )}
       </div>
       <div className="card mt-3">
@@ -151,12 +131,7 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
                   <tr
                     key={examination.id}
                     onClick={() => handleExaminationClick(examination)}
-                    className={
-                      selectedExamination &&
-                      selectedExamination.id === examination.id
-                        ? "selected-exam"
-                        : ""
-                    }
+                    className={selectedExamination && selectedExamination.id === examination.id ? 'selected-exam' : ''}
                   >
                     <td>{index + 1}</td>
                     <td>
@@ -166,11 +141,7 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
                         </p>
                       ))}
                     </td>
-                    <td>
-                      {examination.date
-                        ? formatDateTime(examination.date)
-                        : "N/A"}
-                    </td>
+                    <td>{examination.date ? formatDateTime(examination.date) : 'N/A'}</td>
                     <td>{examination.index}</td>
                   </tr>
                 ))}
@@ -181,12 +152,7 @@ const PatientDetail = ({ selectedPatientId, closeDetail }) => {
           <p style={{ margin: 10 }}>Chưa có lần khám bệnh.</p>
         )}
       </div>
-      {showMedicalExDetail && (
-        <MedicalExDetail
-          selectedExamination={selectedExamination}
-          examinationIndex={index}
-        />
-      )}
+      {showMedicalExDetail && <MedicalExDetail selectedExamination={selectedExamination} examinationIndex={index} />}
     </div>
   );
 };

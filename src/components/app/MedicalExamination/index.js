@@ -32,12 +32,12 @@ const MedicalExaminationDetails = ({ selectedMedical, patientId }) => {
           Chi tiết phiếu khám bệnh
         </h4>
         <div key={selectedMedical.id}>
-          <h5 style={{ marginLeft: 15, marginTop: 20, fontWeight: 700 }}>Lần khám: {selectedMedical.index}</h5>
+          <h5 style={{ marginLeft: 15, marginTop: 20, fontWeight: 700 }}>Lần khám: {selectedMedical.recordNumber}</h5>
           <table className="table table-striped table-sm mt-2">
             <tbody>
               <tr>
                 <th>Ngày khám: </th>
-                <td>{selectedMedical.date ? dayjs(selectedMedical.date).format('DD/MM/YYYY') : ''}</td>
+                <td>{selectedMedical.date ? dayjs(selectedMedical.created_at).format('DD/MM/YYYY HH:mm') : ''}</td>
               </tr>
               <tr>
                 <th>Mã - Tên bệnh: </th>

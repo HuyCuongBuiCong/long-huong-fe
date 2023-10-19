@@ -78,8 +78,8 @@ const PatientDetails = (props) => {
   };
 
   const dateFieldBodyTemplate = (medicalRecord) => {
-    const date = medicalRecord.date;
-    return <span>{date && dayjs(date).format('DD/MM/YYYY')}</span>;
+    const date = medicalRecord.created_at;
+    return <span>{date && dayjs(date).format('DD/MM/YYYY HH:mm')}</span>;
   };
 
   const yearOfBirth = patient?.yearOfBirth ? new Date(patient.yearOfBirth).getFullYear() : '';
@@ -140,7 +140,7 @@ const PatientDetails = (props) => {
                   className="w-25"
                 />
                 <Column field="description" header="Chuẩn đoán" />
-                <Column field="index" header="Lần khám" body={indexFieldBodyTemplate} className="w-8" />
+                <Column field="recordNumber" header="Lần khám" className="w-8" />
                 <Column
                   field="date"
                   header="Ngày khám"
