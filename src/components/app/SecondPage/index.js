@@ -1,15 +1,23 @@
 import React from 'react';
-import patientService, { getPrescriptions, getDiseases } from '../../../services/patientService';
+import patientService, { getPrescriptions, getDiseases, updatePrescriptions } from '../../../services/patientService';
 import { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import PrescriptionDialog from './PrescriptionDialog';
 import DiseaseDialog from './DiseaseDialog';
+import { useRef } from 'react';
+import { Toast } from 'primereact/toast';
 
-const SecondPage = () => {
+const SecondPage = ({ props }) => {
+  const toast = useRef(null);
+  const [prescriptionId, setPrescriptionId] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
   const [diseases, setDiseases] = useState([]);
   const [showPrescriptionDialog, setShowPrescriptionDialog] = useState(false);
   const [showDiseaseDialog, setShowDiseaseDialog] = useState(false);
+  const [namePrescription, setNamePrescription] = useState('');
+  const [pathPrescription, setPathPrescription] = useState('');
+  const [updateNamePrescription, setUpdateNamePrescription] = useState('');
+  const [updatePathPrescription, setUpdatePathPrescription] = useState('');
 
   const onShowDialogPrescription = () => {
     setShowPrescriptionDialog(true);
@@ -52,6 +60,26 @@ const SecondPage = () => {
     getPrescriptions();
     getDiseases();
   }, []);
+  // const prescriptionData = props.prescriptionData;
+
+  const handleUpdatePrescription = async (e) => {
+    e.preventDefault();
+
+    updatePrescriptions({
+      prescriptionId: prescriptionId,
+      namePrescription: updateNamePrescription,
+      pathPrescription: updatePathPrescription
+    })
+      .then((response) => {
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
+        window.location.reload();
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+      });
+  };
 
   return (
     <div className="p-2 h-100 overflow-auto">
@@ -74,22 +102,15 @@ const SecondPage = () => {
                 <>
                   <tr>
                     <td key={c._id}>{c.name}</td>
-                    <td>
-                      <a
-                        href={`E:/React/MERN stack/STOREJEANO/client/src/assets/images/emptyCart.png`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Xem tài liệu
-                      </a>
-                    </td>
+                    <td>{c.path}</td>
                     <td>
                       <button
                         className="btn btn-primary ms-2"
                         onClick={() => {
-                          // setVisible(true);
-                          // setUpdatedName(c.name);
-                          // setSelected(c);
+                          setShowPrescriptionDialog(true);
+                          setUpdateNamePrescription(c.name);
+                          setUpdatePathPrescription(c.path);
+                          setPrescriptionId(c.id);
                         }}
                       >
                         Chỉnh sửa
@@ -112,10 +133,13 @@ const SecondPage = () => {
       </div>
       {showPrescriptionDialog && (
         <PrescriptionDialog
-          // patientId={patientId}
+          handleSubmit={handleUpdatePrescription}
+          namePrescription={updateNamePrescription}
+          pathPrescription={updatePathPrescription}
+          setNamePrescription={setUpdateNamePrescription}
+          setPathPrescription={setUpdatePathPrescription}
           visible={showPrescriptionDialog}
           onHide={onHideDialogPrescription}
-          // onPrescriptionChange={handlePrescription}
         />
       )}
       <div className="card">
@@ -164,14 +188,7 @@ const SecondPage = () => {
           </table>
         </div>
       </div>
-      {showDiseaseDialog && (
-        <DiseaseDialog
-          // patientId={patientId}
-          visible={showDiseaseDialog}
-          onHide={onHideDialogDisease}
-          // onPrescriptionChange={handlePrescription}
-        />
-      )}
+      {showDiseaseDialog && <DiseaseDialog visible={showDiseaseDialog} onHide={onHideDialogDisease} />}
     </div>
   );
 };

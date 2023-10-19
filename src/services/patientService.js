@@ -51,11 +51,13 @@ export const getPrescriptions = async () => {
 };
 
 export const addPrescriptions = async (prescriptionData) => {
-  return baseRequestService.post(`${API_PATH.prescriptions}`, prescriptionData).then((res) => {
-    const newPrescription = res.data;
-    console.log('New prescription add: ', newPrescription);
-    return newPrescription;
-  });
+  return baseRequestService.post(`${API_PATH.prescriptions}`, prescriptionData).then((response) => response.data);
+};
+
+export const updatePrescriptions = async (id, prescriptionData, updatePrescription) => {
+  return baseRequestService
+    .put(`${API_PATH.prescriptions}/15`, prescriptionData, updatePrescription)
+    .then((response) => response.data);
 };
 
 export const addPatient = async (patientId) => {

@@ -25,25 +25,26 @@ const PrescriptionDialog = (props) => {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.value);
+    const selectedFile = e.target.files[0];
+    console.log(selectedFile, 'vsdvdsvs');
+    // if (selectedFile) {
+    //   setFile(e.target.files[0]);
+    // }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await addPrescriptions({
-        name: name,
-        path: file
-      });
-      console.log(res);
-      if (res && res.data) {
+    addPrescriptions({
+      name: name,
+      path: file
+    })
+      .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
-      } else if (res && res.data.message) {
-        toast.current.show({ severity: 'error', summary: 'Error', detail: res.data.message });
-      }
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
-    }
+        // window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+      });
   };
 
   return (
@@ -96,13 +97,8 @@ const PrescriptionDialog = (props) => {
             Thêm file toa thuốc
           </FormLabel>
           <Col sm={6}>
-            <Form.Control
-              type="file"
-              onChange={handleFileChange}
-              onBlur={handleBlur}
-              value={file}
-              placeholder="Chọn file"
-            />
+            <Form.Control type="file" onChange={handleFileChange} placeholder="Chọn file" />
+            {file && <p>Selected File: {file}</p>}
           </Col>
         </Row>
       </Dialog>

@@ -67,7 +67,7 @@ const MedicalExaminationDetails = ({ selectedMedical, patientId }) => {
                 </td>
               </tr>
               <tr>
-                <th>Tập tin đính kèm: </th>
+                <th>Tập tin đính kèm: {selectedMedical.files} </th>
                 <td>
                   <ul></ul>
                 </td>

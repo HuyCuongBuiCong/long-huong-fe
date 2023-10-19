@@ -43,7 +43,6 @@ const MedicalExDialog = (props) => {
   const [value, setValue] = useState('');
 
   const [prescriptionIds, setPrescriptionIds] = useState([]);
-  const [selectedFileName, setSelectedFileName] = useState(''); // To display the selected file name
 
   const [diseases, setDiseases] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
@@ -51,7 +50,6 @@ const MedicalExDialog = (props) => {
   const [description, setDescription] = useState('');
   const [diseaseCode, setDiseaseCode] = useState([]);
   const [diseaseNames, setDiseaseNames] = useState([]);
-  const [formMedical, setFormMedical] = useState(true);
   const [selectedDiseases, setSelectedDiseases] = useState([]);
   const [selectedPrescriptions, setSelectedPrescriptions] = useState([]);
 
@@ -59,23 +57,16 @@ const MedicalExDialog = (props) => {
 
   const [diseaseSuggestions, setDiseaseSuggestions] = useState([]);
 
-  const [file, setFile] = useState();
+  const [file, setFile] = useState([]);
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    setSelectedFileName(selectedFile ? selectedFile.name : '');
-  };
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handlePrescriptionChange = (prescriptions) => {
-    setPrescriptionIds(prescriptions);
-  };
-
-  const handleDiseaseCodeChange = (e) => {
-    setDiseaseCode(e.target.value);
+    const selectedFiles = e.target.files;
+    if (selectedFiles.length > 0) {
+      const fileNames = Array.from(selectedFiles).map((file) => file.name);
+      setFile(fileNames);
+    } else {
+      setFile([]); // Clear the array when no files are selected
+    }
   };
 
   const handleDiseaseNameChange = (e) => {
@@ -186,7 +177,8 @@ const MedicalExDialog = (props) => {
       diseases: selectedDiseasesData,
       prescriptionIds: selectedPrescriptionIds,
       description: formik.values.description,
-      patient_id: patientId
+      patient_id: patientId,
+      files: file
     };
     console.log(data);
     const formData = new FormData();
@@ -330,13 +322,7 @@ const MedicalExDialog = (props) => {
               Thêm file
             </FormLabel>
             <Col sm={6}>
-              <Form.Control
-                type="file"
-                onChange={handleFileChange}
-                onBlur={handleBlur}
-                // value={file}
-                placeholder="Chọn file"
-              />
+              <Form.Control type="file" onChange={handleFileChange} placeholder="Chọn file" />
             </Col>
           </Row>
         </Form>
