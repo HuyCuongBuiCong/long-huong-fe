@@ -61,12 +61,14 @@ const MedicalExDialog = (props) => {
 
   const handleFileChange = (e) => {
     const selectedFiles = e.target.files;
-    if (selectedFiles.length > 0) {
-      const fileNames = Array.from(selectedFiles).map((file) => file.name);
-      setFile(fileNames);
-    } else {
-      setFile([]); // Clear the array when no files are selected
-    }
+    setFile(selectedFiles);
+    console.log(selectedFiles);
+    // if (selectedFiles.length > 0) {
+    //   const fileNames = Array.from(selectedFiles).map((file) => file);
+    //   setFile(fileNames);
+    // } else {
+    //   setFile([]); // Clear the array when no files are selected
+    // }
   };
 
   const handleDiseaseNameChange = (e) => {
@@ -186,8 +188,8 @@ const MedicalExDialog = (props) => {
 
     addMedicalExamination(patientId, data)
       .then((response) => {
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
-        window.location.reload();
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Đã thêm phiếu khám bệnh thành công' });
+        // window.location.reload();
       })
       .catch((error) => {
         console.error(error);

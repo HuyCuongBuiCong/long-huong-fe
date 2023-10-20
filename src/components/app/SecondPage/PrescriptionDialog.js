@@ -24,13 +24,24 @@ const PrescriptionDialog = (props) => {
     setName(e.target.value);
   };
 
+  // const handleFileChange = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   console.log(selectedFile, 'vsdvdsvs');
+  //   // if (selectedFile) {
+  //   //   setFile(e.target.files[0]);
+  //   // }
+  // };
+
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    console.log(selectedFile, 'vsdvdsvs');
-    // if (selectedFile) {
-    //   setFile(e.target.files[0]);
-    // }
+    const selectedFiles = e.target.files;
+    if (selectedFiles.length > 0) {
+      const fileNames = Array.from(selectedFiles).map((file) => file.name);
+      setFile(fileNames);
+    } else {
+      setFile([]); // Clear the array when no files are selected
+    }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     addPrescriptions({
@@ -94,11 +105,10 @@ const PrescriptionDialog = (props) => {
         </Row>
         <Row className="form-group">
           <FormLabel column sm={3} htmlFor="file" className="text-end">
-            Thêm file toa thuốc
+            Thêm file
           </FormLabel>
           <Col sm={6}>
             <Form.Control type="file" onChange={handleFileChange} placeholder="Chọn file" />
-            {file && <p>Selected File: {file}</p>}
           </Col>
         </Row>
       </Dialog>

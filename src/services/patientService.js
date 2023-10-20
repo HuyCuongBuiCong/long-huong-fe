@@ -54,22 +54,30 @@ export const addPrescriptions = async (prescriptionData) => {
   return baseRequestService.post(`${API_PATH.prescriptions}`, prescriptionData).then((response) => response.data);
 };
 
-export const updatePrescriptions = async (id, prescriptionData, updatePrescription) => {
+export const updatePrescriptions = async (prescriptionData, updatePrescription) => {
   return baseRequestService
-    .put(`${API_PATH.prescriptions}/15`, prescriptionData, updatePrescription)
+    .put(`${API_PATH.prescriptions}/${prescriptionData}`, updatePrescription)
     .then((response) => response.data);
 };
+
+export const deletePrescriptions = async (prescriptionData) => {
+  return baseRequestService.delete(`${API_PATH.prescriptions}/${prescriptionData}`).then((response) => response.data);
+};
+
+// export const updatePrescriptions = async (prescriptionId, updatePrescription) => {
+//   return baseRequestService
+//     .put(`${API_PATH.prescriptions}/${prescriptionId}`, updatePrescription)
+//     .then((response) => response.data);
+// };
 
 export const addPatient = async (patientId) => {
   return baseRequestService.post(`${API_PATH.patients}`, patientId).then((response) => response.data);
 };
 
 export const addMedicalExamination = async (patientId, medicalExaminationData) => {
-  return baseRequestService.post(`${API_PATH.medicalRecord}/${patientId}`, medicalExaminationData).then((res) => {
-    const newMedicalExamination = res.data;
-    console.log('New medical examination added: ', newMedicalExamination);
-    return newMedicalExamination;
-  });
+  return baseRequestService
+    .post(`${API_PATH.medicalRecord}/${patientId}`, medicalExaminationData)
+    .then((response) => response.data);
 };
 
 export default {
