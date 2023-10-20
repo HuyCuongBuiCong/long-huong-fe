@@ -34,12 +34,12 @@ const DiseaseDialog = (props) => {
       name: name
     })
       .then((response) => {
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm danh mục bệnh thành công' });
         // window.location.reload();
       })
       .catch((error) => {
         console.error(error);
-        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh nhân' });
+        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Đã xảy ra lỗi khi thêm bệnh' });
       });
   };
   return (
