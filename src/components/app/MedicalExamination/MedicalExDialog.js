@@ -189,7 +189,7 @@ const MedicalExDialog = (props) => {
     addMedicalExamination(patientId, data)
       .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Đã thêm phiếu khám bệnh thành công' });
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
