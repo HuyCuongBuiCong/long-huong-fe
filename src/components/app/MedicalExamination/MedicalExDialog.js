@@ -207,13 +207,14 @@ const MedicalExDialog = (props) => {
       });
     }
 
-    formData.append('description', description);
+    formData.append('description', formik.values.description);
     selectedDiseasesCopy.forEach((disease, index) => {
       formData.append('diseaseIds[' + index + ']', disease.id);
     });
 
     selectedPrescriptionIds.forEach((selectedPrescriptionId, index) => {
-      formData.append('prescriptionIds[' + index + ']', selectedPrescriptionId);
+      formData.append('medicalRecordPrescriptions[' + index + '][prescriptionId]', selectedPrescriptionId);
+      formData.append('medicalRecordPrescriptions[' + index + '][amount]', '2');
     });
 
     prescriptionsData.forEach((data, index) => {

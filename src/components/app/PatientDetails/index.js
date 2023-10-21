@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { Button } from 'primereact/button';
 import MedicalExDialog from '../MedicalExamination/MedicalExDialog';
 import MedicalExaminationDetails from '../MedicalExamination';
+import PrintPatient from '../PrintPatient/PrintPatient';
 
 const PatientDetails = (props) => {
   const patientId = props.patientId;
@@ -153,11 +154,14 @@ const PatientDetails = (props) => {
           </div>
           <div className="card">
             {selectedMedical ? (
-              <MedicalExaminationDetails selectedMedical={selectedMedical} patientId={patientId} />
+              <MedicalExaminationDetails selectedMedical={selectedMedical} patient={patient} />
             ) : (
               <h4 style={{ flex: 1, margin: 20 }}>Vui lòng chọn lần khám bệnh để xem chi tiết.</h4>
             )}
           </div>{' '}
+          <div className="card">
+            {selectedMedical && <PrintPatient selectedMedical={selectedMedical} patient={patient} />}
+          </div>
         </div>
       )}{' '}
       {showMedicalDialog && (
