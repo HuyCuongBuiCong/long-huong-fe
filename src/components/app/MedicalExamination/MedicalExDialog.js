@@ -44,9 +44,9 @@ const MedicalExDialog = (props) => {
   const [value, setValue] = useState('');
 
   const [prescriptionIds, setPrescriptionIds] = useState([]);
-
   const [diseases, setDiseases] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
+  const [prescriptionsData, setPrescriptionsData] = useState([]);
 
   const [description, setDescription] = useState('');
   const [diseaseCode, setDiseaseCode] = useState([]);
@@ -95,6 +95,16 @@ const MedicalExDialog = (props) => {
     console.log(selectedPrescription);
     setSelectedPrescriptions([...selectedPrescriptions, selectedPrescription]);
     setPrescriptionIds([...prescriptionIds, selectedPrescription.name]);
+
+    const quantity = prompt('Nhập số lượng ' + selectedPrescription.name); // This is just for the example
+
+    const prescriptionData = {
+      name: selectedPrescription.name,
+      quantity: quantity || 1 // Use 1 as default if no quantity is entered
+    };
+
+    setPrescriptionsData([...prescriptionsData, prescriptionData]);
+
     formik.setFieldValue('prescriptionName', selectedPrescription.name);
   };
   const handleDiseaseSelect = (e) => {
@@ -183,6 +193,11 @@ const MedicalExDialog = (props) => {
       formData.append('prescriptionIds[' + index + ']', selectedPrescriptionId);
     });
 
+    prescriptionsData.forEach((data, index) => {
+      formData.append(`prescriptions[${index}][name]`, data.name);
+      formData.append(`prescriptions[${index}][quantity]`, data.quantity);
+    });
+    
     for (const value of formData.values()) {
       console.log(value);
     }
@@ -269,6 +284,20 @@ const MedicalExDialog = (props) => {
                 placeholder="Nhập tên bệnh nhân"
               />
               <FormikErrorMessage formik={formik} field="name" />
+            </Col>
+          </Row>
+          <Row className="form-group">
+            <FormLabel column sm={3} className="text-end">
+              Toa Thuốc
+            </FormLabel>
+            <Col sm={6}>
+              <ul>
+                {prescriptionsData.map((data, index) => (
+                  <li key={index}>
+                    Name: {data.name}, Quantity: {data.quantity}
+                  </li>
+                ))}
+              </ul>
             </Col>
           </Row>
           <Row className="form-group">
