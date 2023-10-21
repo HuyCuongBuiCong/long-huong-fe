@@ -10,12 +10,22 @@ import { useFormik } from 'formik';
 import classNames from 'classnames';
 import * as Yup from 'yup';
 import _ from 'lodash';
-import axios from 'axios';
-import { useEffect } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
-import { addPatient, getPatient } from '../../../services/patientService';
+import { addPatient } from '../../../services/patientService';
 import { InputMask } from 'primereact/inputmask';
+import cities from '../../../data/DiaGioiHanhChinhVN_master_data.json';
+
+const GENDER_OPTION = Object.freeze({
+  Male: Object.freeze({
+    value: 'Male',
+    label: 'Nam'
+  }),
+  Female: Object.freeze({
+    value: 'Female',
+    label: 'Nữ'
+  })
+});
 
 const validationSchema = Yup.object().shape({
   fullname: Yup.string().required('Vui lòng nhập tên bệnh nhân'),
@@ -31,23 +41,13 @@ const INITIAL_CUSTOMER_REQUEST = Object.freeze({
   phone: '',
   yearOfBirth: '',
   gender: '',
-  city: '',
-  ward: ''
+  city: null,
+  ward: null
 });
 
 const PatientDialog = (props) => {
   const toast = useRef(null);
-  const [fullname, setFullname] = useState('');
-  const [yearOfBirth, setYearOfBirth] = useState('');
-  const [gender, setGender] = useState('');
-  const [phone, setPhone] = useState('');
-  const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [selectedWard, setSelectedWard] = useState(null);
-
   const isUpdateMode = false;
 
   const formik = useFormik({
@@ -57,39 +57,38 @@ const PatientDialog = (props) => {
   });
   const { touched, errors, values, handleBlur, handleChange, setFieldValue, setFieldTouched } = formik;
 
-  const handleGenderChange = (e) => {
-    setGender(e.target.value);
-  };
-
   const getFormData = async () => {
     formik.handleSubmit();
     const errors = await formik.validateForm(formik.values);
+    console.log(formik.values);
     if (_.isEmpty(errors)) {
       return formik.values;
     }
     return null;
   };
 
-  const handleSubmitData = async (e) => {
-    e.preventDefault();
+  const handleSubmitData = async () => {
+    const formValue = await getFormData();
+    if (!formValue) {
+      return;
+    }
 
-    const selectedCityData = cities.find((city) => city.Id === selectedCity);
-    const cityName = selectedCityData ? selectedCityData.Name : null;
+    const selectedCity = cities.find((city) => city.Id === formValue.city);
+    const cityName = selectedCity?.Name || '';
 
-    const selectedWardData = wards.find((ward) => ward.Id === selectedWard);
-    const wardName = selectedWardData ? wardName.Name : null;
+    const selectedDistrict = districts.find((district) => district.Id === formValue.ward);
+    const districtName = selectedDistrict?.Name || '';
 
-    const selectedDistrictData = districts.find((district) => district.Id === selectedDistrict);
-    const districtName = selectedDistrictData ? selectedDistrictData.Name : null;
-    let formValue = formik.values;
-    addPatient({
+    const patient = {
       fullname: formValue.fullname,
       yearOfBirth: formValue.yearOfBirth,
-      gender: gender,
+      gender: formValue.gender,
       city: cityName,
       ward: districtName,
       phone: formValue.phone
-    })
+    };
+
+    addPatient(patient)
       .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
         window.location.reload();
@@ -100,45 +99,19 @@ const PatientDialog = (props) => {
       });
   };
 
-  useEffect(() => {
-    axios
-      .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
-      .then((response) => {
-        setCities(response.data);
-      })
-      .catch((error) => {
-        console.error('Lỗi khi tải dữ liệu:', error);
-      });
-  }, []);
-
   const handleCityChange = (e) => {
-    setSelectedCity(e.value);
-
-    const selectedCityData = cities.find((city) => city.Id === e.value);
-    if (selectedCityData) {
-      setDistricts(selectedCityData.Districts);
+    const selectedCity = cities.find((city) => city.Id === e.value);
+    if (selectedCity) {
+      setDistricts(selectedCity.Districts);
     } else {
       setDistricts([]);
     }
-
-    setSelectedWard(null);
-  };
-
-  const handleDistrictChange = (e) => {
-    setSelectedDistrict(e.value);
-
-    const selectedCityData = cities.find((city) => city.Id === selectedCity);
-    if (selectedCityData) {
-      const selectedDistrictData = selectedCityData.Districts.find((district) => district.Id === e.value);
-      if (selectedDistrictData) {
-        setWards(selectedDistrictData.Wards);
-      } else {
-        setWards([]);
-      }
-    } else {
-      setWards([]);
+    if (!e.value) {
+      formik.setFieldValue('city', null);
     }
+    formik.setFieldValue('ward', null);
   };
+
   return (
     <>
       <Dialog
@@ -192,21 +165,19 @@ const PatientDialog = (props) => {
           <Col>
             <div className="field-radiobutton">
               <RadioButton
-                id="option1"
-                name="option"
-                value="Nữ"
-                checked={gender === 'Nữ'}
-                onChange={handleGenderChange}
+                name="gender"
+                value={GENDER_OPTION.Female.label}
+                checked={values.gender === GENDER_OPTION.Female.label}
+                onChange={handleChange}
               />
-              <label htmlFor="option1">Nữ</label>
+              <label htmlFor="option1">{GENDER_OPTION.Female.label}</label>
               <RadioButton
-                id="option2"
-                name="option"
-                value="Nam"
-                checked={gender === 'Nam'}
-                onChange={handleGenderChange}
+                name="gender"
+                value={GENDER_OPTION.Male.label}
+                checked={values.gender === GENDER_OPTION.Male.label}
+                onChange={handleChange}
               />
-              <label htmlFor="option2">Nam</label>
+              <label htmlFor="option2">{GENDER_OPTION.Male.label}</label>
             </div>
             <FormikErrorMessage formik={formik} field="gender" />
           </Col>
@@ -224,9 +195,9 @@ const PatientDialog = (props) => {
               name="yearOfBirth"
               view="year"
               dateFormat="yy"
-              onChange={formik.handleChange}
+              onChange={handleChange}
               onBlur={handleBlur}
-              value={formik.values.yearOfBirth}
+              value={values.yearOfBirth}
               placeholder="Nhập năm sinh"
             />
             <FormikErrorMessage formik={formik} field="yearOfBirth" />
@@ -238,15 +209,15 @@ const PatientDialog = (props) => {
           </FormLabel>
           <Col sm={4}>
             <InputMask
-              id="phone"
-              name="phone"
-              mask="9999999999"
-              placeholder="(84)999999999"
-              onChange={formik.handleChange}
-              value={formik.values.phone}
               className={classNames({
                 'is-invalid': touched.phone && errors.phone
               })}
+              id="phone"
+              name="phone"
+              mask="9999999999"
+              placeholder="0981234567"
+              onChange={handleChange}
+              value={values.phone}
             />
             <FormikErrorMessage formik={formik} field="phone" />
           </Col>
@@ -258,30 +229,33 @@ const PatientDialog = (props) => {
           <Col sm={6}>
             <Dropdown
               className="p-mb-3"
-              value={selectedCity}
-              options={cities.map((city) => ({
-                label: city.Name,
-                value: city.Id
-              }))}
-              onChange={handleCityChange}
+              options={cities}
+              optionValue="Id"
+              optionLabel="Name"
+              name="city"
+              value={values.city}
+              onChange={(e) => {
+                handleChange(e);
+                handleCityChange(e);
+              }}
               placeholder="Chọn tỉnh thành"
               filter
               showClear
-              filterBy="label,value"
+              filterBy="Name"
             />
             <FormikErrorMessage formik={formik} field="city" />
             <Dropdown
               className="p-mb-3 mt-2"
-              value={selectedDistrict}
-              options={districts.map((district) => ({
-                label: district.Name,
-                value: district.Id
-              }))}
-              onChange={handleDistrictChange}
+              value={values.ward}
+              options={districts}
+              optionValue="Id"
+              optionLabel="Name"
+              name="ward"
+              onChange={handleChange}
               placeholder="Chọn quận huyện"
               filter
               showClear
-              filterBy="label,value"
+              filterBy="Name"
             />
             <FormikErrorMessage formik={formik} field="ward" />
           </Col>
