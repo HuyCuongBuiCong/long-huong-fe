@@ -13,6 +13,7 @@ import FormikErrorMessage from '../../Common/FormikErrorMessage';
 import { addMedicalExamination, getDiseases, getPrescriptions } from '../../../services/patientService';
 import patientService from '../../../services/patientService';
 import { FileUpload } from 'primereact/fileupload';
+import Table from 'react-bootstrap/Table';
 
 const validationSchema = Yup.object().shape({
   diseaseCode: Yup.string().required('Vui lòng nhập mã bệnh'),
@@ -96,11 +97,9 @@ const MedicalExDialog = (props) => {
     setSelectedPrescriptions([...selectedPrescriptions, selectedPrescription]);
     setPrescriptionIds([...prescriptionIds, selectedPrescription.name]);
 
-    const quantity = prompt('Nhập số lượng ' + selectedPrescription.name); // This is just for the example
-
     const prescriptionData = {
       name: selectedPrescription.name,
-      quantity: quantity || 1 // Use 1 as default if no quantity is entered
+      quantity: 1 // Use 1 as default if no quantity is entered
     };
 
     setPrescriptionsData([...prescriptionsData, prescriptionData]);
@@ -122,6 +121,12 @@ const MedicalExDialog = (props) => {
       (prescription) => prescription.id !== unselectedPrescription.id
     );
     setSelectedPrescriptions(updatedSelectedPrescription);
+
+    const updatedPrescriptionsData = prescriptionsData.filter(
+      (prescription) => prescription.name !== unselectedPrescription.name
+    );
+
+    setPrescriptionsData(updatedPrescriptionsData);
     // formik.setFieldValue(
     //   'prescriptionIds',
     //   formik.values.prescriptionIds.filter((id) => id !== unselectedPrescription.id)
@@ -170,6 +175,24 @@ const MedicalExDialog = (props) => {
     // console.log(prescriptions, 'lakbve');
   }, []);
 
+  const handleQuantityChange = (e, index) => {
+    const newPrescriptionsData = [...prescriptionsData];
+    newPrescriptionsData[index].quantity = e.target.value;
+    setPrescriptionsData(newPrescriptionsData);
+  };
+
+  const handleRemoveRow = (prescription) => {
+    // Remove the prescription from prescriptionsData
+    const prescriptionName = prescription.name;
+    const updatedPrescriptionsData = prescriptionsData.filter((prescription) => prescription.name !== prescriptionName);
+    setPrescriptionsData(updatedPrescriptionsData);
+
+    const updatedSelectedPrescription = selectedPrescriptions.filter(
+      (prescription) => prescription.name !== prescriptionName
+    );
+    setSelectedPrescriptions(updatedSelectedPrescription);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const patientId = props.patientId;
@@ -197,7 +220,7 @@ const MedicalExDialog = (props) => {
       formData.append(`prescriptions[${index}][name]`, data.name);
       formData.append(`prescriptions[${index}][quantity]`, data.quantity);
     });
-    
+
     for (const value of formData.values()) {
       console.log(value);
     }
@@ -287,20 +310,6 @@ const MedicalExDialog = (props) => {
             </Col>
           </Row>
           <Row className="form-group">
-            <FormLabel column sm={3} className="text-end">
-              Toa Thuốc
-            </FormLabel>
-            <Col sm={6}>
-              <ul>
-                {prescriptionsData.map((data, index) => (
-                  <li key={index}>
-                    Name: {data.name}, Quantity: {data.quantity}
-                  </li>
-                ))}
-              </ul>
-            </Col>
-          </Row>
-          <Row className="form-group">
             <FormLabel column sm={3} htmlFor="diseaseCode" className="text-end">
               Toa thuốc
             </FormLabel>
@@ -324,6 +333,44 @@ const MedicalExDialog = (props) => {
                 multiple
               />
               <FormikErrorMessage formik={formik} field="prescriptionIds" />
+            </Col>
+          </Row>
+          <Row className="form-group">
+            <FormLabel column sm={3} className="text-end">
+              Toa Thuốc
+            </FormLabel>
+            <Col sm={9}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Tên</th>
+                    <th>Số lượng</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {prescriptionsData.map((data, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{data.name}</td>
+                      <td>
+                        <input type="number" value={data.quantity} onChange={(e) => handleQuantityChange(e, index)} />
+                      </td>
+                      <td>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRemoveRow(data);
+                          }}
+                          icon="pi pi-trash"
+                          label=""
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </Col>
           </Row>
           <Row className="form-group">
