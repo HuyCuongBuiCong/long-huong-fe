@@ -12,6 +12,7 @@ import { Col, Form, FormLabel, Row } from 'react-bootstrap';
 import FormikErrorMessage from '../../Common/FormikErrorMessage';
 import { addMedicalExamination, getDiseases, getPrescriptions } from '../../../services/patientService';
 import patientService from '../../../services/patientService';
+import { FileUpload } from 'primereact/fileupload';
 
 const validationSchema = Yup.object().shape({
   diseaseCode: Yup.string().required('Vui lòng nhập mã bệnh'),
@@ -60,15 +61,9 @@ const MedicalExDialog = (props) => {
   const [file, setFile] = useState([]);
 
   const handleFileChange = (e) => {
-    const selectedFiles = e.target.files;
+    const selectedFiles = e.files;
     setFile(selectedFiles);
     console.log(selectedFiles);
-    // if (selectedFiles.length > 0) {
-    //   const fileNames = Array.from(selectedFiles).map((file) => file);
-    //   setFile(fileNames);
-    // } else {
-    //   setFile([]); // Clear the array when no files are selected
-    // }
   };
 
   const handleDiseaseNameChange = (e) => {
@@ -169,27 +164,32 @@ const MedicalExDialog = (props) => {
     e.preventDefault();
     const patientId = props.patientId;
     const selectedDiseasesCopy = [...selectedDiseases];
-    const selectedDiseasesData = selectedDiseasesCopy.map((disease) => ({
-      diseaseCode: disease.diseaseCode,
-      name: disease.name
-    }));
     const selectedPrescriptionIds = selectedPrescriptions.map((prescription) => prescription.id);
-
-    const data = {
-      diseases: selectedDiseasesData,
-      prescriptionIds: selectedPrescriptionIds,
-      description: formik.values.description,
-      patient_id: patientId,
-      files: file
-    };
-    console.log(data);
     const formData = new FormData();
-    formData.append('file', file);
 
-    addMedicalExamination(patientId, data)
+    formData.append('patient_id', patientId);
+    if (file) {
+      file.forEach((f, index) => {
+        formData.append('files[]', f);
+      });
+    }
+
+    formData.append('description', description);
+    selectedDiseasesCopy.forEach((disease, index) => {
+      formData.append('diseaseIds[' + index + ']', disease.id);
+    });
+
+    selectedPrescriptionIds.forEach((selectedPrescriptionId, index) => {
+      formData.append('prescriptionIds[' + index + ']', selectedPrescriptionId);
+    });
+
+    for (const value of formData.values()) {
+      console.log(value);
+    }
+    addMedicalExamination(patientId, formData)
       .then((response) => {
         toast.current.show({ severity: 'success', summary: 'Success', detail: 'Đã thêm phiếu khám bệnh thành công' });
-        window.location.reload();
+        //window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -324,7 +324,7 @@ const MedicalExDialog = (props) => {
               Thêm file
             </FormLabel>
             <Col sm={6}>
-              <Form.Control type="file" onChange={handleFileChange} placeholder="Chọn file" />
+              <FileUpload mode="basic" multiple onSelect={handleFileChange} chooseLabel="Chọn file" />
             </Col>
           </Row>
         </Form>

@@ -80,7 +80,11 @@ export const addPatient = async (patientId) => {
 
 export const addMedicalExamination = async (patientId, medicalExaminationData) => {
   return baseRequestService
-    .post(`${API_PATH.medicalRecord}/${patientId}`, medicalExaminationData)
+    .post(`${API_PATH.medicalRecord}/${patientId}`, medicalExaminationData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
     .then((response) => response.data);
 };
 
