@@ -217,8 +217,8 @@ const MedicalExDialog = (props) => {
     });
 
     prescriptionsData.forEach((data, index) => {
-      formData.append(`prescriptions[${index}][name]`, data.name);
-      formData.append(`prescriptions[${index}][quantity]`, data.quantity);
+      formData.append(`medicalRecordPrescriptions[${index}][name]`, data.name);
+      formData.append(`medicalRecordPrescriptions[${index}][quantity]`, data.quantity);
     });
 
     for (const value of formData.values()) {
