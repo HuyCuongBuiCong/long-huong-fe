@@ -49,7 +49,7 @@ const PrescriptionDialog = (props) => {
       path: file
     })
       .then((response) => {
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm bệnh nhân thành công' });
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm toa thuốc thành công' });
         // window.location.reload();
       })
       .catch((error) => {

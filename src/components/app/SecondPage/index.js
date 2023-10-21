@@ -85,10 +85,60 @@ const SecondPage = ({ props }) => {
     <div className="p-2 h-100 overflow-auto">
       <div className="card">
         <div className="p-inputgroup">
+          <h4 style={{ flex: 1, margin: 20 }}>Quản lý tên bệnh</h4>
+          <Button icon="pi pi-plus-circle" label="Thêm tên bệnh mới" onClick={onShowDialogDisease} />
+        </div>{' '}
+        <div className="w-100">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Mã bệnh</th>
+                <th scope="col">Tên bệnh</th>
+                <th scope="col">Hoạt động</th>
+              </tr>
+            </thead>
+            <tbody>
+              {diseases?.map((c) => (
+                <>
+                  <tr key={c._id}>
+                    <td>{c.diseaseCode}</td>
+                    <td>{c.name}</td>
+
+                    <td>
+                      <button
+                        className="btn btn-primary ms-2"
+                        onClick={() => {
+                          // setVisible(true);
+                          // setUpdatedName(c.name);
+                          // setSelected(c);
+                        }}
+                      >
+                        Chỉnh sửa
+                      </button>
+                      <button
+                        className="btn btn-danger ms-2"
+                        onClick={() => {
+                          // handleDelete(c._id);
+                        }}
+                      >
+                        Xóa
+                      </button>
+                    </td>
+                  </tr>{' '}
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {showDiseaseDialog && <DiseaseDialog visible={showDiseaseDialog} onHide={onHideDialogDisease} />}
+
+      <div className="card">
+        <div className="p-inputgroup">
           <h4 style={{ flex: 1, margin: 20 }}>Quản lý toa thuốc</h4>
           <Button icon="pi pi-plus-circle" label="Thêm toa thuốc mới" onClick={onShowDialogPrescription} />
         </div>{' '}
-        <div className="w-100">
+        <div className="w-100 overflow-auto">
           <table className="table">
             <thead>
               <tr>
@@ -142,53 +192,6 @@ const SecondPage = ({ props }) => {
           onHide={onHideDialogPrescription}
         />
       )}
-      <div className="card">
-        <div className="p-inputgroup">
-          <h4 style={{ flex: 1, margin: 20 }}>Quản lý tên bệnh</h4>
-          <Button icon="pi pi-plus-circle" label="Thêm tên bệnh mới" onClick={onShowDialogDisease} />
-        </div>{' '}
-        <div className="w-100">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Tên</th>
-                <th scope="col">Hoạt động</th>
-              </tr>
-            </thead>
-            <tbody>
-              {diseases?.map((c) => (
-                <>
-                  <tr>
-                    <td key={c._id}>{c.name}</td>
-
-                    <td>
-                      <button
-                        className="btn btn-primary ms-2"
-                        onClick={() => {
-                          // setVisible(true);
-                          // setUpdatedName(c.name);
-                          // setSelected(c);
-                        }}
-                      >
-                        Chỉnh sửa
-                      </button>
-                      <button
-                        className="btn btn-danger ms-2"
-                        onClick={() => {
-                          // handleDelete(c._id);
-                        }}
-                      >
-                        Xóa
-                      </button>
-                    </td>
-                  </tr>{' '}
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      {showDiseaseDialog && <DiseaseDialog visible={showDiseaseDialog} onHide={onHideDialogDisease} />}
     </div>
   );
 };

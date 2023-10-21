@@ -34,7 +34,7 @@ const DiseaseDialog = (props) => {
       name: name
     })
       .then((response) => {
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm danh mục bệnh thành công' });
+        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Thêm tên bệnh thành công' });
         // window.location.reload();
       })
       .catch((error) => {
