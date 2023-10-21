@@ -29,7 +29,7 @@ const MedicalExaminationDetails = ({ selectedMedical, patientId }) => {
       />
       <div ref={componentRef}>
         <h4 className="text-center" style={{ flex: 1, margin: 20 }}>
-          Chi tiết phiếu khám bệnh
+          THÔNG TIN BỆNH NHÂN
         </h4>
         <div key={selectedMedical.id}>
           <h5 style={{ marginLeft: 15, marginTop: 20, fontWeight: 700 }}>Lần khám: {selectedMedical.recordNumber}</h5>
